@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Requisition</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:   #1a2035;
+    --navy-m: #243050;
+    --rule:   #dde2ec;
+    --text:   #1a2035;
+    --muted:  #6b7494;
+    --white:  #ffffff;
+    --bg:     #eef1f8;
+    --card:   #f7f9fc;
+    --s1:#ed4d18; --s2:#e89d00; --s3:#fad82d; --s4:#c4da4b; --s5:#83c96e;
+    --sc:#58595b; --inactive:#e2e6ef;
+  }
+  body {
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:36px 20px 100px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .page { width:100%; max-width:780px; }
+
+  /* Header */
+  .doc-header {
+    display:flex; align-items:flex-start; justify-content:space-between;
+    margin-bottom:24px;
+  }
+  .agency { font-size:10px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+  .doc-title { font-size:22px; font-weight:600; color:var(--navy); }
+  .doc-meta { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-align:right; line-height:1.7; }
+
+  /* Card */
+  .card { background:var(--white); border-radius:14px; box-shadow:0 2px 16px rgba(26,32,53,.08); overflow:hidden; margin-bottom:16px; }
+  .card-head {
+    background:var(--navy); color:var(--white);
+    padding:15px 22px; display:flex; align-items:center; gap:11px;
+  }
+  .card-head .ico { font-size:18px; }
+  .card-head h2 { font-size:14px; font-weight:600; letter-spacing:.02em; }
+  .card-body { padding:20px 22px; }
+
+  /* Fields */
+  .fields { display:grid; grid-template-columns:1fr 1fr; }
+  .field { padding:11px 0; border-bottom:1px solid var(--rule); }
+  .field.full { grid-column:1/-1; }
+  .field:nth-last-child(-n+2):not(.full) { border-bottom:none; }
+  .field.full:last-child { border-bottom:none; }
+  .fl { font-size:10px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+  .fv { font-size:13px; font-weight:500; color:var(--text); min-height:18px; }
+  .fv.long { font-size:13px; font-weight:400; line-height:1.55; }
+
+  /* Status */
+  .status-wrap { padding:4px 22px 20px; border-top:1px solid var(--rule); }
+  .status-wrap .fl { margin-bottom:9px; }
+  .sbar { display:flex; gap:3px; margin-bottom:5px; }
+  .seg { flex:1; height:13px; border-radius:3px; background:var(--inactive); }
+  .snames { display:flex; gap:3px; }
+  .sname { flex:1; font-size:10px; text-align:center; color:var(--muted); font-weight:500; }
+  .sname.active { color:var(--text); font-weight:700; }
+
+  /* Emergency badge */
+  .badge {
+    display:inline-block; font-size:10px; font-weight:700; letter-spacing:.07em;
+    text-transform:uppercase; padding:3px 9px; border-radius:20px;
+    background:#fff0ed; color:#ed4d18; border:1px solid #f9c4b3;
+  }
+
+  /* Items table */
+  .items-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .items-table thead tr { background:var(--card); border-bottom:2px solid var(--rule); }
+  .items-table th {
+    padding:9px 12px; text-align:left;
+    font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+  }
+  .items-table th.c { text-align:center; }
+  .items-table tbody tr { border-bottom:1px solid var(--rule); }
+  .items-table tbody tr:last-child { border-bottom:none; }
+  .items-table td { padding:10px 12px; color:var(--text); }
+  .items-table td.c { text-align:center; }
+  .items-table td.mono { font-family:'DM Mono',monospace; font-size:12px; }
+  .chk {
+    width:16px; height:16px; border:2px solid var(--rule); border-radius:4px;
+    display:inline-flex; align-items:center; justify-content:center;
+    background:var(--white); font-size:11px; color:#83c96e; font-weight:700; margin:auto;
+  }
+  .chk.yes { background:#f0fbee; border-color:#83c96e; }
+
+  /* Loading / error */
+  .loading { padding:24px; text-align:center; color:var(--muted); font-size:13px; }
+  .loading .spinner {
+    width:22px; height:22px; border:2px solid var(--rule);
+    border-top-color:var(--navy); border-radius:50%;
+    animation:spin .7s linear infinite; display:inline-block; margin-bottom:10px;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .err { padding:16px; color:#c0392b; font-size:13px; background:#fff5f5; border-top:1px solid #fdd; }
+  .empty-row td { color:var(--muted); font-style:italic; padding:20px 12px; }
+
+  /* Print bar */
+  .print-bar {
+    position:fixed; bottom:0; left:0; right:0;
+    background:var(--white); border-top:1px solid var(--rule);
+    padding:12px 24px; display:flex; align-items:center; justify-content:center; gap:14px;
+    z-index:100; box-shadow:0 -4px 20px rgba(26,32,53,.07);
+  }
+  .btn-print {
+    background:var(--navy); color:var(--white); border:none; border-radius:8px;
+    padding:10px 28px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; letter-spacing:.02em; display:flex; align-items:center; gap:8px;
+    transition:background .2s,transform .1s;
+  }
+  .btn-print:hover { background:var(--navy-m); }
+  .btn-print:active { transform:scale(.97); }
+  .print-hint { font-size:12px; color:var(--muted); }
+
+  @media print {
+    body { background:white; padding:0; }
+    .print-bar { display:none; }
+    .card { box-shadow:none; border:1px solid #dde2ec; border-radius:8px; }
+    .page { max-width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <div class="agency">City of Salisbury · SFD</div>
+      <div class="doc-title">Supply Requisition</div>
+    </div>
+    <div class="doc-meta" id="doc-meta"></div>
+  </div>
+
+  <!-- Main card -->
+  <div class="card">
+    <div class="card-head"><span class="ico">📋</span><h2>Request Details</h2></div>
+    <div class="card-body">
+      <div class="fields">
+        <div class="field">
+          <div class="fl">Date</div>
+          <div class="fv" id="f-date">—</div>
+        </div>
+        <div class="field">
+          <div class="fl">Shift</div>
+          <div class="fv" id="f-shift">—</div>
+        </div>
+        <div class="field">
+          <div class="fl">Station</div>
+          <div class="fv" id="f-station">—</div>
+        </div>
+        <div class="field">
+          <div class="fl">Officer</div>
+          <div class="fv" id="f-officer">—</div>
+        </div>
+        <div class="field full">
+          <div class="fl">Staff Requesting</div>
+          <div class="fv" id="f-staff">—</div>
+        </div>
+        <div class="field full" id="emergency-row" style="display:none;">
+          <div class="fl">Emergency Request</div>
+          <div class="fv"><span class="badge">After-Hours Emergency</span> <span id="f-emergency-filled" style="font-size:12px;color:var(--muted);margin-left:6px;"></span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Status -->
+    <div class="status-wrap">
+      <div class="fl">Status</div>
+      <div class="sbar">
+        <div class="seg" id="seg1"></div>
+        <div class="seg" id="seg2"></div>
+        <div class="seg" id="seg3"></div>
+        <div class="seg" id="seg4"></div>
+        <div class="seg" id="seg5"></div>
+      </div>
+      <div class="snames">
+        <div class="sname" id="sn1">Submitted</div>
+        <div class="sname" id="sn2">Received</div>
+        <div class="sname" id="sn3">Ordered</div>
+        <div class="sname" id="sn4">Partially Filled</div>
+        <div class="sname" id="sn5">Completed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Justification & Notes -->
+  <div class="card" id="card-notes" style="display:none;">
+    <div class="card-head"><span class="ico">📝</span><h2>Justification &amp; Notes</h2></div>
+    <div class="card-body">
+      <div class="fields">
+        <div class="field full" id="justif-row" style="display:none;">
+          <div class="fl">Justification</div>
+          <div class="fv long" id="f-justification"></div>
+        </div>
+        <div class="field full" id="notes-row" style="display:none; border-bottom:none;">
+          <div class="fl">Admin Notes</div>
+          <div class="fv long" id="f-notes"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Items Requested -->
+  <div class="card">
+    <div class="card-head"><span class="ico">📦</span><h2>Items Requested</h2></div>
+    <div style="padding:0;">
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th class="c" style="width:52px;">Filled</th>
+            <th>Description</th>
+            <th class="c" style="width:60px;">Qty</th>
+            <th style="width:90px;">Size</th>
+            <th style="width:70px;">Unit</th>
+          </tr>
+        </thead>
+        <tbody id="items-tbody">
+          <tr><td colspan="5" class="loading">
+            <div class="spinner"></div><br>Loading items…
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<div class="print-bar">
+  <span class="print-hint">Ready to print or save as PDF</span>
+  <button class="btn-print" onclick="window.print()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8" rx="1"/>
+      <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+    </svg>
+    Print / Save PDF
+  </button>
+</div>
+
+<script>
+const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/service_59857e5f36af4d7c8b18305a7248e9aa/FeatureServer';
+const PARENT_LAYER = BASE + '/0';
+const CHILD_TABLE  = BASE + '/1';
+
+const p = new URLSearchParams(window.location.search);
+const gid = p.get('globalid'); // e.g. {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
+
+function setText(id, val, fallback) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = (val && val.toString().trim()) ? val : (fallback || '—');
+}
+
+function showEl(id) { const el = document.getElementById(id); if(el) el.style.display = ''; }
+function hideEl(id) { const el = document.getElementById(id); if(el) el.style.display = 'none'; }
+
+// Status bar
+const STATUS_STEPS = ['Submitted','Received','Ordered','Partially Filled','Completed'];
+const STATUS_COLORS = ['#ed4d18','#e89d00','#fad82d','#c4da4b','#83c96e'];
+
+function renderStatus(status) {
+  const isCancelled = status === 'Cancelled';
+  const activeIdx = isCancelled ? 5 : STATUS_STEPS.indexOf(status) + 1;
+  for (let i = 1; i <= 5; i++) {
+    const seg = document.getElementById('seg' + i);
+    const sn  = document.getElementById('sn'  + i);
+    if (i <= activeIdx) {
+      seg.style.background = isCancelled ? '#58595b' : STATUS_COLORS[i-1];
+    }
+    if (i === activeIdx) sn.classList.add('active');
+  }
+  if (isCancelled) document.getElementById('sn5').textContent = 'Cancelled';
+}
+
+// Format epoch date
+function fmtDate(epoch) {
+  if (!epoch) return '—';
+  return new Date(epoch).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+}
+
+// ── Fetch parent feature ──────────────────────────────────
+async function loadParent() {
+  if (!gid) {
+    // Fall back to URL params for basic fields (legacy support)
+    populateFromParams();
+    return;
+  }
+  try {
+    const encoded = encodeURIComponent(gid);
+    const url = `${PARENT_LAYER}/query?where=globalid%3D'${encoded}'&outFields=*&f=json`;
+    const res  = await fetch(url);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const feat = data.features && data.features[0];
+    if (!feat) throw new Error('Record not found');
+    const a = feat.attributes;
+
+    setText('f-date',    a.formatted_date || fmtDate(a.date_input));
+    setText('f-shift',   a.shift_select);
+    setText('f-station', a.station_select);
+    setText('f-officer', a.officer_input);
+    setText('f-staff',   a.staff_input);
+
+    // Emergency
+    if (a.emergency_request === 'yes') {
+      showEl('emergency-row');
+      if (a.emergency_request_yes) {
+        document.getElementById('f-emergency-filled').textContent = 'Filled by: ' + a.emergency_request_yes;
+      }
+    }
+
+    // Justification / notes — prefer _long fields
+    const justif = a.justification_long || a.justification || '';
+    const notes  = a.request_notes_long || a.request_notes  || '';
+    if (justif || notes) showEl('card-notes');
+    if (justif) { showEl('justif-row'); setText('f-justification', justif, ''); }
+    if (notes)  { showEl('notes-row');  setText('f-notes',  notes,  ''); }
+
+    // Status
+    renderStatus(a.request_status || '');
+
+    // Doc meta
+    document.getElementById('doc-meta').innerHTML =
+      `<div>${a.station_select || ''}</div>` +
+      `<div>${a.formatted_date || fmtDate(a.date_input) || ''}</div>` +
+      `<div style="font-size:10px;margin-top:2px;color:#b0b8cc;">OBJECTID ${a.objectid}</div>`;
+
+  } catch(e) {
+    console.error('Parent fetch error:', e);
+    populateFromParams(); // graceful fallback
+  }
+}
+
+// Fallback: read from URL params
+function populateFromParams() {
+  const get = k => { const v = p.get(k); return (v && v !== 'null') ? decodeURIComponent(v) : ''; };
+  setText('f-date',    get('date'));
+  setText('f-shift',   get('shift'));
+  setText('f-station', get('station'));
+  setText('f-officer', get('officer'));
+  setText('f-staff',   get('staff'));
+  const justif = get('justification'), notes = get('notes'), status = get('status');
+  if (justif || notes) showEl('card-notes');
+  if (justif) { showEl('justif-row'); setText('f-justification', justif, ''); }
+  if (notes)  { showEl('notes-row');  setText('f-notes',  notes,  ''); }
+  if (status) renderStatus(status);
+}
+
+// ── Fetch child items ─────────────────────────────────────
+async function loadItems() {
+  const tbody = document.getElementById('items-tbody');
+  if (!gid) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No GlobalID provided — items unavailable.</td></tr>';
+    return;
+  }
+  try {
+    const encoded = encodeURIComponent(gid);
+    const fields  = 'filled_select,description,quantity,size_item,unit,description_long';
+    const url = `${CHILD_TABLE}/query?where=parentglobalid%3D'${encoded}'&outFields=${fields}&orderByFields=objectid+ASC&f=json`;
+    const res  = await fetch(url);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const features = data.features || [];
+    if (features.length === 0) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No items found for this request.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = features.map(f => {
+      const a = f.attributes;
+      const isFilled = (a.filled_select || '').toLowerCase() === 'yes';
+      const desc = a.description_long || a.description || '';
+      return `<tr>
+        <td class="c"><div class="chk${isFilled?' yes':''}">${isFilled?'✓':''}</div></td>
+        <td>${desc || '<span style="color:var(--muted);font-style:italic;">—</span>'}</td>
+        <td class="c mono">${a.quantity != null ? a.quantity : '—'}</td>
+        <td>${a.size_item || '—'}</td>
+        <td>${a.unit || '—'}</td>
+      </tr>`;
+    }).join('');
+
+  } catch(e) {
+    console.error('Items fetch error:', e);
+    document.getElementById('items-tbody').innerHTML =
+      `<tr><td colspan="5" class="err">Could not load items: ${e.message}</td></tr>`;
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────
+loadParent();
+loadItems();
+</script>
+</body>
+</html>
