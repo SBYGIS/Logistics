@@ -46,16 +46,16 @@
   /* Logo container — mix-blend-mode removes black bg */
   .logo-wrap {
     width:72px; height:72px; flex-shrink:0;
-    background:#000;
-    border-radius:50%;
-    border:2px solid var(--gold);
-    overflow:hidden;
+    
+    
+    
+    
     display:flex; align-items:center; justify-content:center;
   }
   .logo-wrap img {
-    width:100%; height:100%; object-fit:cover;
-    mix-blend-mode:lighten; /* knocks out black pixels */
-    filter:contrast(1.1) brightness(1.05);
+    width:100%; height:100%; object-fit:contain;
+    
+    
   }
 
   .doc-header-text { flex:1; }
@@ -65,7 +65,7 @@
   .doc-meta { font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,.65); text-align:right; line-height:1.9; flex-shrink:0; }
 
   /* ── Card ── */
-  .card { background:var(--white); border-radius:10px; box-shadow:0 2px 12px rgba(0,0,0,.08); overflow:hidden; margin-bottom:14px; border:1px solid var(--rule); }
+  .card { background:var(--white); border-radius:10px; box-shadow:0 2px 12px rgba(0,0,0,.08);  margin-bottom:14px; border:1px solid var(--rule); }
   .card-head {
     background:var(--grey); color:var(--white);
     padding:12px 20px; display:flex; align-items:center; gap:10px;
@@ -139,7 +139,7 @@
   .loading { padding:24px; text-align:center; color:var(--muted); font-size:13px; }
   .loading .spinner {
     width:20px; height:20px; border:2px solid #ddd;
-    border-top-color:var(--red); border-radius:50%;
+    border-top-color:var(--red); 
     animation:spin .7s linear infinite; display:inline-block; margin-bottom:8px;
   }
   @keyframes spin { to { transform:rotate(360deg); } }
