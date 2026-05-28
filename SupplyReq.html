@@ -303,6 +303,12 @@
 
 
 <div class="print-bar">
+  <button class="btn-email" id="btn-copy" onclick="copyLink()">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+    </svg>
+    Copy Link
+  </button>
   <button class="btn-email" id="btn-email" onclick="emailLink()">
     <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -450,7 +456,6 @@ async function loadItems() {
 
 // ── Email Link ────────────────────────────────────────────
 function emailLink() {
-  // Build subject and body using current page data
   const station  = document.getElementById('f-station')?.textContent  || '';
   const date     = document.getElementById('f-date')?.textContent     || '';
   const officer  = document.getElementById('f-officer')?.textContent  || '';
@@ -464,11 +469,25 @@ function emailLink() {
     'Date: '     + date    + '\n' +
     'Officer: '  + officer + '\n' +
     'Staff: '    + staff   + '\n\n' +
-    'View / Print:\n' + pageURL + '\n\n' +
+    'View / Print:\n' +
+    '<' + pageURL + '>\n\n' +
     '— Salisbury Fire Department GIS'
   );
 
   window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+}
+
+// ── Copy Link ─────────────────────────────────────────────
+function copyLink() {
+  const btn = document.getElementById('btn-copy');
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.style.background = '#2d7a2d';
+    setTimeout(() => {
+      btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Link';
+      btn.style.background = '';
+    }, 2000);
+  });
 }
 
 loadParent();
