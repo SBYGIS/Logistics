@@ -161,13 +161,22 @@
   }
   .btn-print:hover { background:var(--red-dark); }
   .btn-print:active { transform:scale(.97); }
+  .btn-email {
+    background:var(--grey); color:var(--white); border:none; border-radius:7px;
+    padding:10px 20px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; letter-spacing:.02em; display:flex; align-items:center; gap:7px;
+    transition:background .2s, transform .1s;
+  }
+  .btn-email:hover { background:#555; }
+  .btn-email:active { transform:scale(.97); }
   .print-hint { font-size:12px; color:var(--muted); }
 
   /* ── Print ── */
   @media print {
     body { background:white; padding:0; }
     .print-bar { display:none; }
-    .card { box-shadow:none; border-radius:6px; page-break-inside:avoid; }
+    #oid-search-bar { display:none; }
+        .card { box-shadow:none; border-radius:6px; page-break-inside:avoid; }
     .page { max-width:100%; }
     * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
     .card-head { background:var(--grey) !important; color:white !important; }
@@ -292,8 +301,15 @@
 
 </div><!-- /page -->
 
+
 <div class="print-bar">
-  <span class="print-hint">Ready to print or save as PDF</span>
+  <button class="btn-email" id="btn-email" onclick="emailLink()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <rect x="2" y="4" width="20" height="16" rx="2"/>
+      <path d="M2 7l10 7 10-7"/>
+    </svg>
+    Email Link
+  </button>
   <button class="btn-print" onclick="window.print()">
     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8" rx="1"/>
@@ -429,6 +445,30 @@ async function loadItems() {
   } catch(e) {
     tbody.innerHTML = '<tr><td colspan="5" class="err">Could not load items: ' + e.message + '</td></tr>';
   }
+}
+
+
+// ── Email Link ────────────────────────────────────────────
+function emailLink() {
+  // Build subject and body using current page data
+  const station  = document.getElementById('f-station')?.textContent  || '';
+  const date     = document.getElementById('f-date')?.textContent     || '';
+  const officer  = document.getElementById('f-officer')?.textContent  || '';
+  const staff    = document.getElementById('f-staff')?.textContent    || '';
+  const pageURL  = window.location.href;
+
+  const subject = encodeURIComponent('SFD Supply Requisition — ' + station + ' · ' + date);
+  const body    = encodeURIComponent(
+    'A supply requisition has been submitted and is ready for review.\n\n' +
+    'Station: '  + station + '\n' +
+    'Date: '     + date    + '\n' +
+    'Officer: '  + officer + '\n' +
+    'Staff: '    + staff   + '\n\n' +
+    'View / Print:\n' + pageURL + '\n\n' +
+    '— Salisbury Fire Department GIS'
+  );
+
+  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
 }
 
 loadParent();
