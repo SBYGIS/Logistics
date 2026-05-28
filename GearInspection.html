@@ -746,7 +746,7 @@ function updateSummary(a) {
 }
 function populateDetails(a) {
   setText('f-name', a.name);
-  setText('f-inspector', a.inspector_name);
+  setText('f-inspector', a.inspector_name || a.inspector_name_signature);
   setText('f-date', a.formatted_date || fmtDate(a.date_of_inspection));
   setText('f-email', a.email);
   setText('f-signature', a.inspector_name_signature);
