@@ -309,13 +309,6 @@
     </svg>
     Copy Link
   </button>
-  <button class="btn-email" id="btn-email" onclick="emailLink()">
-    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <rect x="2" y="4" width="20" height="16" rx="2"/>
-      <path d="M2 7l10 7 10-7"/>
-    </svg>
-    Email Link
-  </button>
   <button class="btn-print" onclick="window.print()">
     <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8" rx="1"/>
@@ -453,29 +446,6 @@ async function loadItems() {
   }
 }
 
-
-// ── Email Link ────────────────────────────────────────────
-function emailLink() {
-  const station  = document.getElementById('f-station')?.textContent  || '';
-  const date     = document.getElementById('f-date')?.textContent     || '';
-  const officer  = document.getElementById('f-officer')?.textContent  || '';
-  const staff    = document.getElementById('f-staff')?.textContent    || '';
-  const pageURL  = window.location.href;
-
-  const subject = encodeURIComponent('SFD Supply Requisition — ' + station + ' · ' + date);
-  const body    = encodeURIComponent(
-    'A supply requisition has been submitted and is ready for review.\n\n' +
-    'Station: '  + station + '\n' +
-    'Date: '     + date    + '\n' +
-    'Officer: '  + officer + '\n' +
-    'Staff: '    + staff   + '\n\n' +
-    'View / Print:\n' +
-    '<' + pageURL + '>\n\n' +
-    '— Salisbury Fire Department GIS'
-  );
-
-  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
-}
 
 // ── Copy Link ─────────────────────────────────────────────
 function copyLink() {
