@@ -3,23 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Supply Requisition — SFD</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Gear Inspection — SFD</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   :root {
-    --red:       #b81c1c;
-    --red-dark:  #8f1212;
-    --red-light: #fdf1f1;
-    --grey:      #3d3d3d;
-    --grey-mid:  #5c5c5c;
+    --red:#b81c1c;
+    --red-dark:#8f1212;
+    --red-light:#fdf1f1;
+    --green:#2f7d32;
+    --green-light:#edf7ed;
+    --fail:#b81c1c;
+    --fail-light:#fff0f0;
+    --grey:#3d3d3d;
+    --grey-mid:#5c5c5c;
     --grey-light:#f4f4f4;
-    --rule:      #ddd;
-    --text:      #1e1e1e;
-    --muted:     #777;
-    --white:     #ffffff;
-    --bg:        #e8e8e8;
-    --gold:      #c8a84b;
+    --rule:#ddd;
+    --text:#1e1e1e;
+    --muted:#777;
+    --white:#ffffff;
+    --bg:#e8e8e8;
+    --gold:#c8a84b;
   }
   body {
     font-family:'DM Sans',sans-serif;
@@ -27,283 +31,310 @@
     color:var(--text);
     min-height:100vh;
     padding:32px 20px 100px;
-    display:flex; flex-direction:column; align-items:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
-  .page { width:100%; max-width:780px; }
+  .page { width:100%; max-width:920px; }
 
-  /* ── Header ── */
   .doc-header {
-    display:flex; align-items:center; gap:20px;
+    display:flex;
+    align-items:center;
+    gap:20px;
     margin-bottom:20px;
-    background:linear-gradient(135deg, #6b0f0f 0%, var(--red-dark) 50%, #6b0f0f 100%);
+    background:linear-gradient(135deg,#6b0f0f 0%,var(--red-dark) 50%,#6b0f0f 100%);
     border-radius:12px;
     padding:18px 24px;
     color:var(--white);
     border:2px solid rgba(200,168,75,.35);
     box-shadow:0 4px 24px rgba(143,18,18,.35);
   }
-
-  /* Logo container — mix-blend-mode removes black bg */
   .logo-wrap {
-    width:72px; height:72px; flex-shrink:0;
-    
-    
-    
-    
-    display:flex; align-items:center; justify-content:center;
+    width:72px;
+    height:72px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
-  .logo-wrap img {
-    width:100%; height:100%; object-fit:contain;
-    
-    
-  }
-
+  .logo-wrap img { width:100%; height:100%; object-fit:contain; }
   .doc-header-text { flex:1; }
-  .agency { font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
-  .doc-title { font-size:22px; font-weight:700; color:var(--white); line-height:1.1; }
-  .doc-subtitle { font-size:11px; color:rgba(255,255,255,.55); margin-top:2px; letter-spacing:.04em; }
-  .doc-meta { font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,.65); text-align:right; line-height:1.9; flex-shrink:0; }
+  .agency {
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:3px;
+  }
+  .doc-title { font-size:24px; font-weight:700; color:var(--white); line-height:1.1; }
+  .doc-subtitle { font-size:11px; color:rgba(255,255,255,.60); margin-top:2px; letter-spacing:.04em; }
+  .doc-meta {
+    font-family:'DM Mono',monospace;
+    font-size:11px;
+    color:rgba(255,255,255,.70);
+    text-align:right;
+    line-height:1.9;
+    flex-shrink:0;
+  }
 
-  /* ── Card ── */
-  .card { background:var(--white); border-radius:10px; box-shadow:0 2px 12px rgba(0,0,0,.08);  margin-bottom:14px; border:1px solid var(--rule); }
+  .card {
+    background:var(--white);
+    border-radius:10px;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+    margin-bottom:14px;
+    border:1px solid var(--rule);
+    overflow:hidden;
+  }
   .card-head {
-    background:var(--grey); color:var(--white);
-    padding:12px 20px; display:flex; align-items:center; gap:10px;
+    background:var(--grey);
+    color:var(--white);
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
     border-left:4px solid var(--red);
   }
+  .card-head-left { display:flex; align-items:center; gap:10px; }
   .card-head .ico { font-size:15px; }
   .card-head h2 { font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+  .card-count { font-family:'DM Mono',monospace; font-size:10px; color:rgba(255,255,255,.70); }
   .card-body { padding:16px 20px; }
 
-  /* ── Fields ── */
-  .fields { display:grid; grid-template-columns:1fr 1fr; }
+  .fields { display:grid; grid-template-columns:1fr 1fr; gap:0 22px; }
   .field { padding:10px 0; border-bottom:1px solid #eee; }
   .field.full { grid-column:1/-1; }
-  .field:nth-last-child(-n+2):not(.full) { border-bottom:none; }
-  .field.full:last-child { border-bottom:none; }
-  .fl { font-size:9px; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+  .fl {
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:3px;
+  }
   .fv { font-size:13px; font-weight:500; color:var(--text); min-height:18px; }
-  .fv.long { font-weight:400; line-height:1.6; }
+  .fv.long { font-weight:400; line-height:1.55; white-space:pre-wrap; }
 
-  /* ── Status bar ── */
-  .status-wrap { padding:4px 20px 18px; border-top:1px solid #eee; }
-  .status-wrap .fl { margin-bottom:8px; }
-  .sbar { display:flex; gap:3px; margin-bottom:5px; }
-  .seg {
-    flex:1; height:13px; border-radius:3px;
-    background:#e5e5e5;
-    transition:box-shadow .2s;
+  .summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .summary-box {
+    border:1px solid var(--rule);
+    border-radius:9px;
+    background:var(--grey-light);
+    padding:12px;
+    text-align:center;
   }
-  /* Active segment gets a drop shadow */
-  .seg.active-seg {
-    box-shadow:0 3px 8px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.2);
-    transform:scaleY(1.1);
-    transform-origin:bottom;
-  }
-  .snames { display:flex; gap:3px; }
-  .sname { flex:1; font-size:9.5px; text-align:center; color:var(--muted); font-weight:500; }
-  .sname.active { color:var(--text); font-weight:700; }
+  .summary-num { font-family:'DM Mono',monospace; font-size:24px; font-weight:700; line-height:1; }
+  .summary-label { font-size:9px; font-weight:700; letter-spacing:.11em; color:var(--muted); text-transform:uppercase; margin-top:6px; }
+  .summary-box.pass .summary-num { color:var(--green); }
+  .summary-box.fail .summary-num { color:var(--fail); }
 
-  /* Print-only status text */
-  #status-text-label { display:none !important; }
-  @media print { #status-text-label { display:block !important; margin-top:6px; } }
+  .inspection-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .inspection-table thead tr { background:var(--grey-light); border-bottom:2px solid var(--rule); }
+  .inspection-table th {
+    padding:9px 12px;
+    text-align:left;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .inspection-table th.c { text-align:center; }
+  .inspection-table tbody tr { border-bottom:1px solid #eee; }
+  .inspection-table tbody tr:last-child { border-bottom:none; }
+  .inspection-table td { padding:10px 12px; color:var(--text); vertical-align:top; }
+  .inspection-table td.c { text-align:center; }
+  .inspection-table td.mono { font-family:'DM Mono',monospace; font-size:12px; }
 
-  /* ── Emergency badge ── */
-  .badge {
-    display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.07em;
-    text-transform:uppercase; padding:3px 10px; border-radius:20px;
-    background:var(--red-light); color:var(--red); border:1px solid #f5b8b8;
+  .pill {
+    display:inline-block;
+    min-width:54px;
+    text-align:center;
+    border-radius:999px;
+    padding:3px 9px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    border:1px solid #d6d6d6;
+    color:var(--muted);
+    background:#f7f7f7;
+  }
+  .pill.pass { color:var(--green); background:var(--green-light); border-color:#b9ddb9; }
+  .pill.fail { color:var(--fail); background:var(--fail-light); border-color:#f0b3b3; }
+  .pill.blank { color:#999; background:#fafafa; border-color:#e5e5e5; }
+
+  .asset-meta {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .asset-meta .field {
+    border:1px solid #eee;
+    border-radius:8px;
+    padding:10px 12px;
+    background:#fafafa;
   }
 
-  /* ── Items table ── */
-  .items-table { width:100%; border-collapse:collapse; font-size:13px; }
-  .items-table thead tr { background:var(--grey-light); border-bottom:2px solid var(--rule); }
-  .items-table th {
-    padding:9px 12px; text-align:left;
-    font-size:9px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);
+  .note-box {
+    margin-top:12px;
+    border:1px solid #eee;
+    border-left:4px solid var(--red);
+    border-radius:8px;
+    padding:12px;
+    background:#fffafa;
   }
-  .items-table th.c { text-align:center; }
-  .items-table tbody tr { border-bottom:1px solid #eee; }
-  .items-table tbody tr:last-child { border-bottom:none; }
-  .items-table td { padding:10px 12px; color:var(--text); }
-  .items-table td.c { text-align:center; }
-  .items-table td.mono { font-family:'DM Mono',monospace; font-size:12px; }
-  .chk {
-    width:16px; height:16px; border:2px solid #ccc; border-radius:3px;
-    display:inline-flex; align-items:center; justify-content:center;
-    background:var(--white); font-size:11px; color:var(--red); font-weight:700; margin:auto;
-  }
-  .chk.yes { background:#fff0f0; border-color:var(--red); }
 
-  /* ── Loading / error ── */
   .loading { padding:24px; text-align:center; color:var(--muted); font-size:13px; }
   .loading .spinner {
-    width:20px; height:20px; border:2px solid #ddd;
-    border-top-color:var(--red); 
-    animation:spin .7s linear infinite; display:inline-block; margin-bottom:8px;
+    width:20px;
+    height:20px;
+    border:2px solid #ddd;
+    border-top-color:var(--red);
+    border-radius:50%;
+    animation:spin .7s linear infinite;
+    display:inline-block;
+    margin-bottom:8px;
   }
   @keyframes spin { to { transform:rotate(360deg); } }
-  .err { padding:14px; color:#c0392b; font-size:13px; background:#fff5f5; }
-  .empty-row td { color:var(--muted); font-style:italic; padding:18px 12px; }
+  .err { padding:14px; color:#c0392b; font-size:13px; background:#fff5f5; border:1px solid #ffd7d7; border-radius:8px; }
+  .muted { color:var(--muted); font-style:italic; }
 
-  /* ── Print bar ── */
   .print-bar {
-    position:fixed; bottom:0; left:0; right:0;
-    background:var(--white); border-top:1px solid var(--rule);
-    padding:11px 24px; display:flex; align-items:center; justify-content:center; gap:14px;
-    z-index:100; box-shadow:0 -4px 16px rgba(0,0,0,.08);
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:var(--white);
+    border-top:1px solid var(--rule);
+    padding:11px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    z-index:100;
+    box-shadow:0 -4px 16px rgba(0,0,0,.08);
   }
-  .btn-print {
-    background:var(--red); color:var(--white); border:none; border-radius:7px;
-    padding:10px 28px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
-    cursor:pointer; letter-spacing:.02em; display:flex; align-items:center; gap:8px;
+  .btn-print, .btn-copy {
+    color:var(--white);
+    border:none;
+    border-radius:7px;
+    padding:10px 20px;
+    font-family:'DM Sans',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    letter-spacing:.02em;
+    display:flex;
+    align-items:center;
+    gap:8px;
     transition:background .2s, transform .1s;
   }
+  .btn-print { background:var(--red); padding-left:28px; padding-right:28px; }
+  .btn-copy { background:var(--grey); }
   .btn-print:hover { background:var(--red-dark); }
-  .btn-print:active { transform:scale(.97); }
-  .btn-email {
-    background:var(--grey); color:var(--white); border:none; border-radius:7px;
-    padding:10px 20px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;
-    cursor:pointer; letter-spacing:.02em; display:flex; align-items:center; gap:7px;
-    transition:background .2s, transform .1s;
-  }
-  .btn-email:hover { background:#555; }
-  .btn-email:active { transform:scale(.97); }
+  .btn-copy:hover { background:#555; }
+  .btn-print:active, .btn-copy:active { transform:scale(.97); }
   .print-hint { font-size:12px; color:var(--muted); }
 
-  /* ── Print ── */
+  @media (max-width:760px) {
+    body { padding:18px 12px 96px; }
+    .doc-header { align-items:flex-start; padding:16px; }
+    .logo-wrap { width:56px; height:56px; }
+    .doc-meta { display:none; }
+    .fields, .summary-grid, .asset-meta { grid-template-columns:1fr; }
+    .inspection-table th, .inspection-table td { padding:8px 7px; }
+  }
+
   @media print {
     body { background:white; padding:0; }
     .print-bar { display:none; }
-    #oid-search-bar { display:none; }
-        .card { box-shadow:none; border-radius:6px; page-break-inside:avoid; }
+    .card { box-shadow:none; border-radius:6px; page-break-inside:avoid; }
     .page { max-width:100%; }
     * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
     .card-head { background:var(--grey) !important; color:white !important; }
     .doc-header { background:#8f1212 !important; }
-    .seg.active-seg { box-shadow:0 3px 8px rgba(0,0,0,.4) !important; }
+    .summary-box, .asset-meta .field { background:#fafafa !important; }
   }
 </style>
 </head>
 <body>
 <div class="page">
-
-  <!-- Header -->
   <div class="doc-header">
     <div class="logo-wrap">
       <img src="https://salisbury.maps.arcgis.com/sharing/rest/content/items/33492bb1f8584dca9449da8c155f936a/data" alt="Salisbury Fire Department">
     </div>
     <div class="doc-header-text">
       <div class="agency">City of Salisbury · Est. 1872</div>
-      <div class="doc-title">Supply Requisition</div>
+      <div class="doc-title">Gear Inspection</div>
       <div class="doc-subtitle">Salisbury Fire Department</div>
     </div>
     <div class="doc-meta" id="doc-meta"></div>
   </div>
 
-  <!-- Request Details -->
   <div class="card">
-    <div class="card-head"><span class="ico">📋</span><h2>Request Details</h2></div>
+    <div class="card-head">
+      <div class="card-head-left"><span class="ico">📋</span><h2>Inspection Details</h2></div>
+    </div>
     <div class="card-body">
       <div class="fields">
         <div class="field">
-          <div class="fl">Date</div>
+          <div class="fl">Name</div>
+          <div class="fv" id="f-name">—</div>
+        </div>
+        <div class="field">
+          <div class="fl">Inspector</div>
+          <div class="fv" id="f-inspector">—</div>
+        </div>
+        <div class="field">
+          <div class="fl">Date of Inspection</div>
           <div class="fv" id="f-date">—</div>
         </div>
         <div class="field">
-          <div class="fl">Shift</div>
-          <div class="fv" id="f-shift">—</div>
-        </div>
-        <div class="field">
-          <div class="fl">Station</div>
-          <div class="fv" id="f-station">—</div>
-        </div>
-        <div class="field">
-          <div class="fl">Officer</div>
-          <div class="fv" id="f-officer">—</div>
+          <div class="fl">Email</div>
+          <div class="fv" id="f-email">—</div>
         </div>
         <div class="field full">
-          <div class="fl">Staff Requesting</div>
-          <div class="fv" id="f-staff">—</div>
-        </div>
-        <div class="field full" id="emergency-row" style="display:none;">
-          <div class="fl">Emergency Request</div>
-          <div class="fv">
-            <span class="badge">🚨 After-Hours Emergency</span>
-            <span id="f-emergency-filled" style="font-size:12px;color:var(--muted);margin-left:6px;"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Status bar -->
-    <div class="status-wrap">
-      <div class="fl">Status</div>
-      <div class="sbar">
-        <div class="seg" id="seg1"></div>
-        <div class="seg" id="seg2"></div>
-        <div class="seg" id="seg3"></div>
-        <div class="seg" id="seg4"></div>
-        <div class="seg" id="seg5"></div>
-      </div>
-      <div class="snames">
-        <div class="sname" id="sn1">Submitted</div>
-        <div class="sname" id="sn2">Received</div>
-        <div class="sname" id="sn3">Ordered</div>
-        <div class="sname" id="sn4">Partially Filled</div>
-        <div class="sname" id="sn5">Completed</div>
-      </div>
-      <div id="status-text-label" style="font-size:12px;font-weight:600;color:var(--text);margin-top:6px;">
-        Current Status: <span id="status-text-value"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Justification & Notes -->
-  <div class="card" id="card-notes" style="display:none;">
-    <div class="card-head"><span class="ico">📝</span><h2>Justification &amp; Notes</h2></div>
-    <div class="card-body">
-      <div class="fields">
-        <div class="field full" id="justif-row" style="display:none;">
-          <div class="fl">Justification</div>
-          <div class="fv long" id="f-justification"></div>
-        </div>
-        <div class="field full" id="notes-row" style="display:none;border-bottom:none;">
-          <div class="fl">Admin Notes</div>
-          <div class="fv long" id="f-notes"></div>
+          <div class="fl">Inspector Name / Signature</div>
+          <div class="fv" id="f-signature">—</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Items Requested -->
   <div class="card">
-    <div class="card-head"><span class="ico">📦</span><h2>Items Requested</h2></div>
-    <div>
-      <table class="items-table">
-        <thead>
-          <tr>
-            <th class="c" style="width:52px;">Filled</th>
-            <th>Description</th>
-            <th class="c" style="width:58px;">Qty</th>
-            <th style="width:88px;">Size</th>
-            <th style="width:68px;">Unit</th>
-          </tr>
-        </thead>
-        <tbody id="items-tbody">
-          <tr><td colspan="5" class="loading">
-            <div class="spinner"></div><br>Loading items…
-          </td></tr>
-        </tbody>
-      </table>
+    <div class="card-head">
+      <div class="card-head-left"><span class="ico">📊</span><h2>Inspection Summary</h2></div>
+    </div>
+    <div class="card-body">
+      <div class="summary-grid">
+        <div class="summary-box pass">
+          <div class="summary-num" id="summary-pass">0</div>
+          <div class="summary-label">Passing Checks</div>
+        </div>
+        <div class="summary-box fail">
+          <div class="summary-num" id="summary-fail">0</div>
+          <div class="summary-label">Failing Checks</div>
+        </div>
+        <div class="summary-box">
+          <div class="summary-num" id="summary-total">0</div>
+          <div class="summary-label">Total Answered</div>
+        </div>
+      </div>
     </div>
   </div>
 
-</div><!-- /page -->
-
+  <div id="inspection-sections">
+    <div class="card">
+      <div class="loading"><div class="spinner"></div><br>Loading inspection…</div>
+    </div>
+  </div>
+</div>
 
 <div class="print-bar">
-  <button class="btn-email" id="btn-copy" onclick="copyLink()">
+  <button class="btn-copy" id="btn-copy" onclick="copyLink()">
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
     </svg>
@@ -319,135 +350,449 @@
 </div>
 
 <script>
-const BASE         = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/service_59857e5f36af4d7c8b18305a7248e9aa/FeatureServer';
+const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/service_efec036352bd43439efbc4ecb0c54d98/FeatureServer';
 const PARENT_LAYER = BASE + '/0';
-const CHILD_TABLE  = BASE + '/1';
 
-const p   = new URLSearchParams(window.location.search);
+const p = new URLSearchParams(window.location.search);
 const gid = p.get('globalid');
 
-function setText(id, val, fallback) {
+function escapeHTML(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+function val(a, field) {
+  const v = a ? a[field] : null;
+  return v != null && String(v).trim() !== '' ? v : '';
+}
+function displayVal(a, field, fallback) {
+  const v = val(a, field);
+  return v !== '' ? v : (fallback || '—');
+}
+function setText(id, value, fallback) {
   const el = document.getElementById(id);
-  if (el) el.textContent = (val != null && val.toString().trim()) ? val : (fallback || '—');
+  if (!el) return;
+  el.textContent = value != null && String(value).trim() !== '' ? value : (fallback || '—');
 }
-function showEl(id) { const el = document.getElementById(id); if (el) el.style.display = ''; }
-
-// Status
-const STATUS_STEPS  = ['Submitted','Received','Ordered','Partially Filled','Completed'];
-const STATUS_COLORS = ['#ed4d18','#e89d00','#fad82d','#c4da4b','#83c96e'];
-
-function renderStatus(status) {
-  const isCancelled = status === 'Cancelled';
-  const activeIdx   = isCancelled ? 5 : STATUS_STEPS.indexOf(status) + 1;
-
-  for (let i = 1; i <= 5; i++) {
-    const seg = document.getElementById('seg' + i);
-    const sn  = document.getElementById('sn'  + i);
-    if (i <= activeIdx) {
-      seg.style.background = isCancelled ? '#58595b' : STATUS_COLORS[i - 1];
-    }
-    // Drop shadow only on the LAST active segment (the current status)
-    if (i === activeIdx) {
-      seg.classList.add('active-seg');
-      sn.classList.add('active');
-    }
-  }
-  if (isCancelled) document.getElementById('sn5').textContent = 'Cancelled';
-  const tv = document.getElementById('status-text-value');
-  if (tv) tv.textContent = status;
-}
-
 function fmtDate(epoch) {
-  if (!epoch) return null;
+  if (!epoch) return '';
   return new Date(epoch).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 }
-
-async function loadParent() {
-  if (!gid) { populateFromParams(); return; }
-  try {
-    const url  = PARENT_LAYER + '/query?where=globalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=*&f=json';
-    const data = await fetch(url).then(r => r.json());
-    if (data.error) throw new Error(data.error.message);
-    const a = data.features[0].attributes;
-
-    setText('f-date',    a.formatted_date || fmtDate(a.date_input));
-    setText('f-shift',   a.shift_select);
-    setText('f-station', a.station_select);
-    setText('f-officer', a.officer_input);
-    setText('f-staff',   a.staff_input);
-
-    if ((a.emergency_request || '').toLowerCase() === 'yes') {
-      showEl('emergency-row');
-      if (a.emergency_request_yes)
-        document.getElementById('f-emergency-filled').textContent = 'Filled by: ' + a.emergency_request_yes;
-    }
-
-    const justif = a.justification_long || a.justification || '';
-    const notes  = a.request_notes_long || a.request_notes  || '';
-    if (justif || notes) showEl('card-notes');
-    if (justif) { showEl('justif-row'); setText('f-justification', justif, ''); }
-    if (notes)  { showEl('notes-row');  setText('f-notes', notes, ''); }
-
-    renderStatus(a.request_status || '');
-
-    document.getElementById('doc-meta').innerHTML =
-      '<div>' + (a.station_select || '') + '</div>' +
-      '<div>' + (a.formatted_date || fmtDate(a.date_input) || '') + '</div>' +
-      '<div style="font-size:10px;opacity:.55;margin-top:2px;">OID ' + a.objectid + '</div>';
-
-  } catch(e) { console.error(e); populateFromParams(); }
+function getDate(a, field) {
+  return val(a, field) ? fmtDate(a[field]) : '';
+}
+function passFailClass(value) {
+  const v = String(value || '').toLowerCase().trim();
+  if (v === 'pass') return 'pass';
+  if (v === 'fail') return 'fail';
+  return 'blank';
+}
+function passFailPill(value) {
+  const clean = String(value || '').trim();
+  const cls = passFailClass(clean);
+  return '<span class="pill ' + cls + '">' + escapeHTML(clean || '—') + '</span>';
+}
+function prettySource(value) {
+  const v = String(value || '').trim().toLowerCase();
+  if (v === 'issued') return 'Issued';
+  if (v === 'personal') return 'Personal';
+  return value || '';
+}
+function sizeLabel(value) {
+  const labels = {
+    xxs:'XXS', xs:'XS', s:'Small', small:'Small',
+    m:'Medium', medium:'Medium', l:'Large', large:'Large',
+    xl:'XL', xxl:'XXL'
+  };
+  const key = String(value || '').trim().toLowerCase();
+  return labels[key] || value || '';
 }
 
+const SECTIONS = [
+  {
+    title:'Coat', icon:'🧥',
+    meta:[
+      ['Serial Number','coat_serial_number'],
+      ['Date of Manufacture','coat_date_of_manufacture','date']
+    ],
+    checks:[
+      ['Cleanliness','coat_cleanliness_shell','coat_cleanliness_liner'],
+      ['Rips / Tears / Etc.','coat_ripstearsetc_shell','coat_ripstearsetc_liner'],
+      ['Heat / Flame Damage','coat_heat_flame_damage_shell','coat_heat_flame_damage_liner'],
+      ['Seams / Stitching','coat_seams_stitching_shell','coat_seams_stitching_liner'],
+      ['Fabric Integrity','coat_fabric_integrity_shell','coat_fabric_integrity_liner'],
+      ['Wristlet Elasticity','coat_wristlet_elasticity_shell','coat_wristlet_elasticity_liner'],
+      ['Reflective Trim','coat_reflective_trim',null],
+      ['Label Integrity','coat_label_integrity_shell','coat_label_integrity_liner'],
+      ['Liner Attachment','coat_liner_attachment_shell','coat_liner_attachment_liner'],
+      ['Closure Function','coat_closure_function',null],
+      ['Closure Hardware','coat_closure_hardware',null],
+      ['DRD Cleanliness','coat_drd_cleanliness',null],
+      ['DRD Integrity','coat_drd_integrity',null],
+      ['Assembled Properly','coat_assembled_properly_shell','coat_assembled_properly_liner'],
+      ['Velcro','coat_velcro',null]
+    ],
+    comments:'coat_comments_long'
+  },
+  {
+    title:'Pants', icon:'👖',
+    meta:[
+      ['Serial Number','pants_serial_number'],
+      ['Date of Manufacture','pants_date_of_manufacture','date']
+    ],
+    checks:[
+      ['Cleanliness','pants_cleanliness_shell','pants_cleanliness_liner'],
+      ['Rips / Tears / Etc.','pants_rips_tears_etc_shell','pants_rips_tears_etc_liner'],
+      ['Heat / Flame Damage','pants_heat_shell','pants_heat_liner'],
+      ['Seams / Stitching','pants_seams_shell','pants_seams_liner'],
+      ['Fabric Integrity','pants_fabric_integity_shell','pants_fabric_integity_liner'],
+      ['Reflective Trim','pants_reflective_trim',null],
+      ['Label Integrity','pants_label_integrity_shell','pants_label_integrity_liner'],
+      ['Liner Attachment','pants_liner_attachment_shell','pants_liner_attachment_liner'],
+      ['Closure Function','pants_closure_function_shell','pants_closure_function_liner'],
+      ['Closure Hardware','pants_closure_hardware_shell','pants_closure_hardware_liner'],
+      ['DRD Cleanliness','pants_drd_cleanliness_shell','pants_drd_cleanliness_liner'],
+      ['DRD Integrity','pants_drd_integrity_shell','pants_drd_integrity_liner'],
+      ['Assembled Properly','pants_assembled_properly_shell','pants_assembled_properly_liner'],
+      ['Velcro','pants_velcro',null]
+    ],
+    comments:'pants_comments_long'
+  },
+  {
+    title:'Issued Hood', icon:'🧢',
+    showWhen:a => val(a,'hood_source') === 'issued' || hasAny(a, ['tan_hood_mfg','tan_hood_size','tan_hood_cleanliness','blue_hood_mfg','blue_hood_size','blue_hood_cleanliness']),
+    meta:[
+      ['Hood Source','hood_source','source'],
+      ['Tan Hood MFG','tan_hood_mfg','date'],
+      ['Tan Hood Size','tan_hood_size','size'],
+      ['Blue Hood MFG','blue_hood_mfg','date'],
+      ['Blue Hood Size','blue_hood_size','size']
+    ],
+    checks:[
+      ['Tan Hood Cleanliness','tan_hood_cleanliness',null],
+      ['Tan Hood Rips / Tears / Etc.','tan_hood_rip_tears_etc',null],
+      ['Tan Hood Flame / Heat Damage','tan_hood_flame_heat_damage',null],
+      ['Tan Hood Seams / Stitching','tan_hood_seems_stitching',null],
+      ['Tan Hood Elasticity','tan_hood_elasticity',null],
+      ['Blue Hood Cleanliness','blue_hood_cleanliness',null],
+      ['Blue Hood Rips / Tears / Etc.','blue_hood_rip_tears_etc',null],
+      ['Blue Hood Flame / Heat Damage','blue_hood_flame_heat_damage',null],
+      ['Blue Hood Seams / Stitching','blue_hood_seems_stitching',null],
+      ['Blue Hood Elasticity','blue_hood_elasticity',null]
+    ],
+    comments:['tan_hood_comments_long','blue_hood_comments_long']
+  },
+  {
+    title:'Personal Hood', icon:'🧢',
+    showWhen:a => val(a,'hood_source') === 'personal' || hasAny(a, ['personal_hood_mfg','personal_hood_size','personal_hood_cleanliness']),
+    meta:[
+      ['Hood Source','hood_source','source'],
+      ['Date of Manufacture','personal_hood_mfg','date'],
+      ['Size','personal_hood_size','size']
+    ],
+    checks:[
+      ['Cleanliness','personal_hood_cleanliness',null],
+      ['Rips / Tears / Etc.','personal_hood_rip_tears_etc',null],
+      ['Flame / Heat Damage','personal_hood_flame_heat_damage',null],
+      ['Seams / Stitching','personal_hood_seems_stitching',null],
+      ['Elasticity','personal_hood_elasticity',null]
+    ],
+    comments:'personal_hood_comments_long'
+  },
+  {
+    title:'Issued Fire Gloves', icon:'🧤',
+    showWhen:a => val(a,'fire_gloves_source') === 'issued' || hasAny(a, ['issued_fire_gloves_mfg','issued_fire_gloves_size','issued_fire_gloves_cleanliness']),
+    meta:[
+      ['Fire Gloves Source','fire_gloves_source','source'],
+      ['Date of Manufacture','issued_fire_gloves_mfg','date'],
+      ['Size','issued_fire_gloves_size','size']
+    ],
+    checks:[
+      ['Cleanliness','issued_fire_gloves_cleanliness',null],
+      ['Rips / Tears / Etc.','issued_fire_gloves_rip_tears_etc',null],
+      ['Flame / Heat Damage','issued_fire_gloves_flame_heat_damage',null],
+      ['Seams / Stitching','issued_fire_gloves_seems_stitching',null],
+      ['Elasticity','issued_fire_gloves_elasticity',null],
+      ['Flexibility','issued_fire_gloves_flexibility',null]
+    ],
+    comments:'issued_fire_gloves_comments_long'
+  },
+  {
+    title:'Personal Fire Gloves', icon:'🧤',
+    showWhen:a => val(a,'fire_gloves_source') === 'personal' || hasAny(a, ['personal_fire_gloves_mfg','personal_fire_gloves_size','personal_fire_gloves_cleanliness']),
+    meta:[
+      ['Fire Gloves Source','fire_gloves_source','source'],
+      ['Date of Manufacture','personal_fire_gloves_mfg','date'],
+      ['Size','personal_fire_gloves_size','size']
+    ],
+    checks:[
+      ['Cleanliness','personal_fire_gloves_cleanliness',null],
+      ['Rips / Tears / Etc.','personal_fire_gloves_rip_tears_etc',null],
+      ['Flame / Heat Damage','personal_fire_gloves_flame_heat_damage',null],
+      ['Seams / Stitching','personal_fire_gloves_seems_stitching',null],
+      ['Elasticity','personal_fire_gloves_elasticity',null],
+      ['Flexibility','personal_fire_gloves_flexibility',null]
+    ],
+    comments:'personal_fire_gloves_comments_long'
+  },
+  {
+    title:'Issued Rescue Gloves', icon:'🧤',
+    showWhen:a => val(a,'rescue_gloves_source') === 'issued' || hasAny(a, ['issued_rescue_gloves_mfg','issued_rescue_gloves_size','issued_rescue_gloves_cleanliness']),
+    meta:[
+      ['Rescue Gloves Source','rescue_gloves_source','source'],
+      ['Date of Manufacture','issued_rescue_gloves_mfg','date'],
+      ['Size','issued_rescue_gloves_size','size']
+    ],
+    checks:[
+      ['Cleanliness','issued_rescue_gloves_cleanliness',null],
+      ['Rips / Tears / Etc.','issued_rescue_gloves_rip_tears_etc',null],
+      ['Flame / Heat Damage','issued_rescue_gloves_flame_heat_damage',null],
+      ['Seams / Stitching','issued_rescue_gloves_seems_stitching',null],
+      ['Elasticity','issued_rescue_gloves_elasticity',null],
+      ['Flexibility','issued_rescue_gloves_flexibility',null]
+    ],
+    comments:'issued_rescue_gloves_comments_long'
+  },
+  {
+    title:'Personal Rescue Gloves', icon:'🧤',
+    showWhen:a => val(a,'rescue_gloves_source') === 'personal' || hasAny(a, ['personal_rescue_gloves_mfg','personal_rescue_gloves_size','personal_rescue_gloves_cleanliness']),
+    meta:[
+      ['Rescue Gloves Source','rescue_gloves_source','source'],
+      ['Date of Manufacture','personal_rescue_gloves_mfg','date'],
+      ['Size','personal_rescue_gloves_size','size']
+    ],
+    checks:[
+      ['Cleanliness','personal_rescue_gloves_cleanliness',null],
+      ['Rips / Tears / Etc.','personal_rescue_gloves_rip_tears_etc',null],
+      ['Flame / Heat Damage','personal_rescue_gloves_flame_heat_damage',null],
+      ['Seams / Stitching','personal_rescue_gloves_seems_stitching',null],
+      ['Elasticity','personal_rescue_gloves_elasticity',null],
+      ['Flexibility','personal_rescue_gloves_flexibility',null]
+    ],
+    comments:'personal_rescue_gloves_comments_long'
+  },
+  {
+    title:'Issued Helmet', icon:'⛑️',
+    showWhen:a => val(a,'helmet_source') === 'issued' || hasAny(a, ['issued_helmet_mfg','issued_helmet_cleanliness']),
+    meta:[
+      ['Helmet Source','helmet_source','source'],
+      ['Date of Manufacture','issued_helmet_mfg','date']
+    ],
+    checks:[
+      ['Cleanliness','issued_helmet_cleanliness',null],
+      ['Rips / Tears / Etc.','issued_helmet_rip_tears_etc',null],
+      ['Flame / Heat Damage','issued_helmet_flame_heat_damage',null],
+      ['Seams / Stitching','issued_helmet_seems_stitching',null],
+      ['Elasticity','issued_helmet_elasticity',null],
+      ['Flexibility','issued_helmet_flexibility',null],
+      ['Eye Shield','issued_helmet_eye_shield',null],
+      ['Tetrahedrons','issued_helmet_tetrahedrons',null],
+      ['Ear Flaps','issued_helmet_ear_flaps',null],
+      ['Impact Shell','issued_helmet_impact_shell',null]
+    ],
+    comments:'issued_helmet_comments_long'
+  },
+  {
+    title:'Personal Helmet', icon:'⛑️',
+    showWhen:a => val(a,'helmet_source') === 'personal' || hasAny(a, ['personal_helmet_mfg','personal_helmet_size','personal_helmet_cleanliness']),
+    meta:[
+      ['Helmet Source','helmet_source','source'],
+      ['Date of Manufacture','personal_helmet_mfg','date'],
+      ['Size','personal_helmet_size','size']
+    ],
+    checks:[
+      ['Cleanliness','personal_helmet_cleanliness',null],
+      ['Rips / Tears / Etc.','personal_helmet_rip_tears_etc',null],
+      ['Flame / Heat Damage','personal_helmet_flame_heat_damage',null],
+      ['Seams / Stitching','personal_helmet_seems_stitching',null],
+      ['Elasticity','personal_helmet_elasticity',null],
+      ['Flexibility','personal_helmet_flexibility',null],
+      ['Eye Shield','personal_helmet_eye_shield',null],
+      ['Tetrahedrons','personal_helmet_tetrahedrons',null],
+      ['Ear Flaps','personal_helmet_ear_flaps',null],
+      ['Impact Shell','personal_helmet_impact_shell',null]
+    ],
+    comments:'personal_helmet_comments_long'
+  },
+  {
+    title:'Issued Boots', icon:'🥾',
+    showWhen:a => val(a,'boots_source') === 'issued' || hasAny(a, ['issued_boots_mfg','issued_boots_size','issued_boots_cleanliness']),
+    meta:[
+      ['Boots Source','boots_source','source'],
+      ['Date of Manufacture','issued_boots_mfg','date'],
+      ['Size','issued_boots_size']
+    ],
+    checks:[
+      ['Cleanliness','issued_boots_cleanliness',null],
+      ['Rips / Tears / Etc.','issued_boots_rip_tears_etc',null],
+      ['Flame / Heat Damage','issued_boots_flame_heat_damage',null],
+      ['Seams / Stitching','issued_boots_seems_stitching',null],
+      ['Exposed Safety Toe','issued_boots_exposed_safety_toe',null],
+      ['Treadwear','issued_boots_treadwear',null],
+      ['Water Resistant','issued_boots_water_resistant',null]
+    ],
+    comments:'issued_boots_comments_long'
+  },
+  {
+    title:'Personal Boots', icon:'🥾',
+    showWhen:a => val(a,'boots_source') === 'personal' || hasAny(a, ['personal_boots_mfg','personal_boots_size','personal_boots_cleanliness']),
+    meta:[
+      ['Boots Source','boots_source','source'],
+      ['Date of Manufacture','personal_boots_mfg','date'],
+      ['Size','personal_boots_size','size']
+    ],
+    checks:[
+      ['Cleanliness','personal_boots_cleanliness',null],
+      ['Rips / Tears / Etc.','personal_boots_rip_tears_etc',null],
+      ['Flame / Heat Damage','personal_boots_flame_heat_damage',null],
+      ['Seams / Stitching','personal_boots_seems_stitching',null],
+      ['Exposed Safety Toe','personal_boots_exposed_safety_toe',null],
+      ['Treadwear','personal_boots_treadwear',null],
+      ['Water Resistant','personal_boots_water_resistant',null]
+    ],
+    comments:'personal_boots_comments_long'
+  },
+  {
+    title:'SCBA Face Piece', icon:'😷',
+    meta:[
+      ['Date of Manufacture','scba_face_mfg','date'],
+      ['Size','scba_face_size','size']
+    ],
+    checks:[
+      ['Cleanliness','scba_face_cleanliness',null],
+      ['Rips / Tears / Etc.','scba_face_rip_tears_etc',null],
+      ['Flame / Heat Damage','scba_face_flame_heat_damage',null],
+      ['Head Netting','scba_face_head_netting',null],
+      ['Elasticity Top','scba_face_elasticity_top',null],
+      ['Flexibility Bottom','scba_face_flexibility_bottom',null],
+      ['Eye Shield','scba_face_eye_shield',null],
+      ['Rubber Seal','scba_rubber_seal',null],
+      ['Nose Cone','scba_face_nose_cone',null]
+    ],
+    comments:'scba_face_comments_long'
+  }
+];
+
+function hasAny(a, fields) {
+  return fields.some(field => val(a, field) !== '');
+}
+function sectionHasAnyData(a, section) {
+  const metaFields = (section.meta || []).map(m => m[1]);
+  const checkFields = (section.checks || []).flatMap(c => [c[1], c[2]]).filter(Boolean);
+  const commentFields = Array.isArray(section.comments) ? section.comments : [section.comments].filter(Boolean);
+  return hasAny(a, metaFields.concat(checkFields, commentFields));
+}
+function renderMetaValue(a, field, type) {
+  if (type === 'date') return getDate(a, field) || '—';
+  if (type === 'source') return prettySource(val(a, field)) || '—';
+  if (type === 'size') return sizeLabel(val(a, field)) || '—';
+  return displayVal(a, field);
+}
+function renderComments(a, comments) {
+  const fields = Array.isArray(comments) ? comments : [comments].filter(Boolean);
+  const values = fields.map(field => val(a, field)).filter(Boolean);
+  if (!values.length) return '';
+  return '<div class="note-box"><div class="fl">Comments</div><div class="fv long">' + escapeHTML(values.join('\n\n')) + '</div></div>';
+}
+function renderSection(a, section) {
+  if (section.showWhen && !section.showWhen(a)) return '';
+  if (!section.showWhen && !sectionHasAnyData(a, section)) return '';
+
+  const answered = section.checks.reduce((sum, row) => sum + (val(a, row[1]) ? 1 : 0) + (row[2] && val(a, row[2]) ? 1 : 0), 0);
+  const meta = (section.meta || []).map(item => {
+    return '<div class="field"><div class="fl">' + escapeHTML(item[0]) + '</div><div class="fv">' + escapeHTML(renderMetaValue(a, item[1], item[2])) + '</div></div>';
+  }).join('');
+
+  const rows = section.checks.map(row => {
+    const label = row[0];
+    const shellField = row[1];
+    const linerField = row[2];
+    const shell = val(a, shellField);
+    const liner = linerField ? val(a, linerField) : null;
+    return '<tr>' +
+      '<td>' + escapeHTML(label) + '</td>' +
+      '<td class="c">' + passFailPill(shell) + '</td>' +
+      '<td class="c">' + (linerField ? passFailPill(liner) : '<span class="muted">N/A</span>') + '</td>' +
+      '</tr>';
+  }).join('');
+
+  return '<div class="card">' +
+    '<div class="card-head"><div class="card-head-left"><span class="ico">' + section.icon + '</span><h2>' + escapeHTML(section.title) + '</h2></div><div class="card-count">' + answered + ' answered</div></div>' +
+    '<div class="card-body">' +
+      (meta ? '<div class="asset-meta">' + meta + '</div>' : '') +
+      '<table class="inspection-table"><thead><tr><th>Inspection Item</th><th class="c" style="width:110px;">Shell / Item</th><th class="c" style="width:110px;">Liner</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      renderComments(a, section.comments) +
+    '</div>' +
+  '</div>';
+}
+function updateSummary(a) {
+  let pass = 0;
+  let fail = 0;
+  SECTIONS.forEach(section => {
+    section.checks.forEach(row => {
+      [row[1], row[2]].filter(Boolean).forEach(field => {
+        const v = String(val(a, field)).toLowerCase().trim();
+        if (v === 'pass') pass++;
+        if (v === 'fail') fail++;
+      });
+    });
+  });
+  document.getElementById('summary-pass').textContent = pass;
+  document.getElementById('summary-fail').textContent = fail;
+  document.getElementById('summary-total').textContent = pass + fail;
+}
+function populateDetails(a) {
+  setText('f-name', a.name);
+  setText('f-inspector', a.inspector_name);
+  setText('f-date', a.formatted_date || fmtDate(a.date_of_inspection));
+  setText('f-email', a.email);
+  setText('f-signature', a.inspector_name_signature);
+
+  document.getElementById('doc-meta').innerHTML =
+    '<div>' + escapeHTML(a.name || '') + '</div>' +
+    '<div>' + escapeHTML(a.formatted_date || fmtDate(a.date_of_inspection) || '') + '</div>' +
+    '<div style="font-size:10px;opacity:.55;margin-top:2px;">OID ' + escapeHTML(a.objectid || '') + '</div>';
+}
 function populateFromParams() {
-  const get = k => { const v = p.get(k); return (v && v !== 'null') ? decodeURIComponent(v) : ''; };
-  setText('f-date',    get('date'));
-  setText('f-shift',   get('shift'));
-  setText('f-station', get('station'));
-  setText('f-officer', get('officer'));
-  setText('f-staff',   get('staff'));
-  const justif = get('justification'), notes = get('notes'), status = get('status');
-  if (justif || notes) showEl('card-notes');
-  if (justif) { showEl('justif-row'); setText('f-justification', justif, ''); }
-  if (notes)  { showEl('notes-row');  setText('f-notes', notes, ''); }
-  if (status) renderStatus(status);
+  const a = {
+    name:p.get('name') || '',
+    inspector_name:p.get('inspector') || '',
+    formatted_date:p.get('date') || '',
+    email:p.get('email') || '',
+    inspector_name_signature:p.get('signature') || '',
+    objectid:p.get('oid') || ''
+  };
+  populateDetails(a);
+  updateSummary(a);
+  document.getElementById('inspection-sections').innerHTML = '<div class="card"><div class="card-body"><div class="err">No GlobalID was provided, so the full inspection fields could not be loaded from ArcGIS.</div></div></div>';
 }
-
-async function loadItems() {
-  const tbody = document.getElementById('items-tbody');
+async function loadParent() {
   if (!gid) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No GlobalID — items unavailable.</td></tr>';
+    populateFromParams();
     return;
   }
-  try {
-    const fields = 'filled_select,description,quantity,size_item,unit,description_long';
-    const url    = CHILD_TABLE + '/query?where=parentglobalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=' + fields + '&orderByFields=objectid+ASC&f=json';
-    const data   = await fetch(url).then(r => r.json());
-    if (data.error) throw new Error(data.error.message);
 
-    const feats = data.features || [];
-    if (!feats.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No items found for this request.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = feats.map(f => {
-      const a        = f.attributes;
-      const isFilled = (a.filled_select || '').toLowerCase().trim() === 'yes';
-      const desc     = a.description_long || a.description || '';
-      return '<tr>' +
-        '<td class="c"><div class="chk' + (isFilled ? ' yes' : '') + '">' + (isFilled ? '✓' : '') + '</div></td>' +
-        '<td>' + (desc || '<span style="color:#999;font-style:italic;">—</span>') + '</td>' +
-        '<td class="c mono">' + (a.quantity != null ? a.quantity : '—') + '</td>' +
-        '<td>' + (a.size_item || '—') + '</td>' +
-        '<td>' + (a.unit || '—') + '</td>' +
-        '</tr>';
-    }).join('');
-  } catch(e) {
-    tbody.innerHTML = '<tr><td colspan="5" class="err">Could not load items: ' + e.message + '</td></tr>';
+  try {
+    const url = PARENT_LAYER + '/query?where=globalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=*&f=json';
+    const data = await fetch(url).then(r => r.json());
+    if (data.error) throw new Error(data.error.message);
+    if (!data.features || !data.features.length) throw new Error('No inspection record found for this GlobalID.');
+
+    const a = data.features[0].attributes;
+    populateDetails(a);
+    updateSummary(a);
+
+    const html = SECTIONS.map(section => renderSection(a, section)).filter(Boolean).join('');
+    document.getElementById('inspection-sections').innerHTML = html || '<div class="card"><div class="card-body"><div class="muted">No inspection sections had entered values.</div></div></div>';
+  } catch (e) {
+    console.error(e);
+    document.getElementById('inspection-sections').innerHTML = '<div class="card"><div class="card-body"><div class="err">Could not load inspection: ' + escapeHTML(e.message) + '</div></div></div>';
+    populateFromParams();
   }
 }
-
-
-// ── Copy Link ─────────────────────────────────────────────
 function copyLink() {
   const btn = document.getElementById('btn-copy');
   navigator.clipboard.writeText(window.location.href).then(() => {
@@ -461,7 +806,6 @@ function copyLink() {
 }
 
 loadParent();
-loadItems();
 </script>
 </body>
 </html>
