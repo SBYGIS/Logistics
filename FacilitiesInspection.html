@@ -456,7 +456,7 @@
 
 <script>
 const PRINT_URL = 'https://sbygis.github.io/Logistics/FacilitiesInspection.html';
-const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/service_7a1c120d3f2542c0be9e7110b3602626/FeatureServer';
+const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/SFD_Facilities_Inspection_Editor_View/FeatureServer';
 const PARENT_LAYER = BASE + '/0';
 
 const p = new URLSearchParams(window.location.search);
@@ -715,10 +715,10 @@ async function loadParent() {
   }
 
   try {
-    const url = PARENT_LAYER + '/query?where=globalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=*&f=json';
+    const url = PARENT_LAYER + '/query?where=globalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=*&returnGeometry=false&f=json';
     const data = await fetch(url).then(r => r.json());
 
-    if (data.error) throw new Error(data.error.message);
+    if (data.error) throw new Error(data.error.details ? data.error.details.join(' ') : data.error.message);
     if (!data.features || !data.features.length) throw new Error('No facilities inspection found for this GlobalID.');
 
     const a = data.features[0].attributes;
