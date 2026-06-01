@@ -27,6 +27,7 @@
     --orange:#b76512;
     --orange-light:#fff6ec;
   }
+
   body {
     font-family:'DM Sans',sans-serif;
     background:var(--bg);
@@ -37,6 +38,7 @@
     flex-direction:column;
     align-items:center;
   }
+
   .page { width:100%; max-width:860px; }
 
   .doc-header {
@@ -51,6 +53,7 @@
     border:2px solid rgba(200,168,75,.35);
     box-shadow:0 4px 24px rgba(143,18,18,.35);
   }
+
   .logo-wrap {
     width:72px;
     height:72px;
@@ -59,8 +62,15 @@
     align-items:center;
     justify-content:center;
   }
-  .logo-wrap img { width:100%; height:100%; object-fit:contain; }
+
+  .logo-wrap img {
+    width:100%;
+    height:100%;
+    object-fit:contain;
+  }
+
   .doc-header-text { flex:1; }
+
   .agency {
     font-size:10px;
     font-weight:600;
@@ -69,8 +79,21 @@
     color:var(--gold);
     margin-bottom:3px;
   }
-  .doc-title { font-size:23px; font-weight:700; color:var(--white); line-height:1.08; }
-  .doc-subtitle { font-size:11px; color:rgba(255,255,255,.60); margin-top:3px; letter-spacing:.04em; }
+
+  .doc-title {
+    font-size:23px;
+    font-weight:700;
+    color:var(--white);
+    line-height:1.08;
+  }
+
+  .doc-subtitle {
+    font-size:11px;
+    color:rgba(255,255,255,.60);
+    margin-top:3px;
+    letter-spacing:.04em;
+  }
+
   .doc-meta {
     font-family:'DM Mono',monospace;
     font-size:11px;
@@ -88,6 +111,7 @@
     border:1px solid var(--rule);
     overflow:hidden;
   }
+
   .card-head {
     background:var(--grey);
     color:var(--white);
@@ -98,14 +122,37 @@
     gap:10px;
     border-left:4px solid var(--red);
   }
-  .card-head-left { display:flex; align-items:center; gap:10px; }
+
+  .card-head-left {
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
   .card-head .ico { font-size:15px; }
-  .card-head h2 { font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+
+  .card-head h2 {
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+
   .card-body { padding:16px 20px; }
 
-  .fields { display:grid; grid-template-columns:1fr 1fr; gap:0 22px; }
-  .field { padding:10px 0; border-bottom:1px solid #eee; }
+  .fields {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 22px;
+  }
+
+  .field {
+    padding:10px 0;
+    border-bottom:1px solid #eee;
+  }
+
   .field.full { grid-column:1/-1; }
+
   .fl {
     font-size:9px;
     font-weight:700;
@@ -114,8 +161,19 @@
     color:var(--muted);
     margin-bottom:3px;
   }
-  .fv { font-size:13px; font-weight:500; color:var(--text); min-height:18px; }
-  .fv.long { font-weight:400; line-height:1.55; white-space:pre-wrap; }
+
+  .fv {
+    font-size:13px;
+    font-weight:500;
+    color:var(--text);
+    min-height:18px;
+  }
+
+  .fv.long {
+    font-weight:400;
+    line-height:1.55;
+    white-space:pre-wrap;
+  }
 
   .status-badge {
     display:inline-block;
@@ -129,9 +187,24 @@
     background:var(--blue-light);
     border:1px solid #b9d7f3;
   }
-  .status-badge.submitted { color:var(--orange); background:var(--orange-light); border-color:#f0c99d; }
-  .status-badge.completed { color:var(--green); background:var(--green-light); border-color:#b9ddb9; }
-  .status-badge.cancelled { color:#555; background:#f1f1f1; border-color:#d2d2d2; }
+
+  .status-badge.submitted {
+    color:var(--orange);
+    background:var(--orange-light);
+    border-color:#f0c99d;
+  }
+
+  .status-badge.completed {
+    color:var(--green);
+    background:var(--green-light);
+    border-color:#b9ddb9;
+  }
+
+  .status-badge.cancelled {
+    color:#555;
+    background:#f1f1f1;
+    border-color:#d2d2d2;
+  }
 
   .type-badge {
     display:inline-block;
@@ -146,8 +219,17 @@
     border:1px solid #f0b3b3;
   }
 
-  .witness-table { width:100%; border-collapse:collapse; font-size:13px; }
-  .witness-table thead tr { background:var(--grey-light); border-bottom:2px solid var(--rule); }
+  .witness-table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+
+  .witness-table thead tr {
+    background:var(--grey-light);
+    border-bottom:2px solid var(--rule);
+  }
+
   .witness-table th {
     padding:9px 12px;
     text-align:left;
@@ -157,13 +239,37 @@
     text-transform:uppercase;
     color:var(--muted);
   }
-  .witness-table th.c, .witness-table td.c { text-align:center; }
-  .witness-table tbody tr { border-bottom:1px solid #eee; }
-  .witness-table tbody tr:last-child { border-bottom:none; }
-  .witness-table td { padding:10px 12px; color:var(--text); }
-  .witness-table td.mono { font-family:'DM Mono',monospace; font-size:12px; }
 
-  .loading { padding:24px; text-align:center; color:var(--muted); font-size:13px; }
+  .witness-table th.c,
+  .witness-table td.c {
+    text-align:center;
+  }
+
+  .witness-table tbody tr {
+    border-bottom:1px solid #eee;
+  }
+
+  .witness-table tbody tr:last-child {
+    border-bottom:none;
+  }
+
+  .witness-table td {
+    padding:10px 12px;
+    color:var(--text);
+  }
+
+  .witness-table td.mono {
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+  }
+
+  .loading {
+    padding:24px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+  }
+
   .loading .spinner {
     width:20px;
     height:20px;
@@ -174,9 +280,26 @@
     display:inline-block;
     margin-bottom:8px;
   }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .err { padding:14px; color:#c0392b; font-size:13px; background:#fff5f5; border:1px solid #ffd7d7; border-radius:8px; }
-  .empty-row td { color:var(--muted); font-style:italic; padding:18px 12px; }
+
+  @keyframes spin {
+    to { transform:rotate(360deg); }
+  }
+
+  .err {
+    padding:14px;
+    color:#c0392b;
+    font-size:13px;
+    background:#fff5f5;
+    border:1px solid #ffd7d7;
+    border-radius:8px;
+  }
+
+  .empty-row td {
+    color:var(--muted);
+    font-style:italic;
+    padding:18px 12px;
+  }
+
   .hidden { display:none !important; }
 
   .print-bar {
@@ -194,7 +317,9 @@
     z-index:100;
     box-shadow:0 -4px 16px rgba(0,0,0,.08);
   }
-  .btn-print, .btn-copy {
+
+  .btn-print,
+  .btn-copy {
     color:var(--white);
     border:none;
     border-radius:7px;
@@ -209,11 +334,22 @@
     gap:8px;
     transition:background .2s, transform .1s;
   }
-  .btn-print { background:var(--red); padding-left:28px; padding-right:28px; }
+
+  .btn-print {
+    background:var(--red);
+    padding-left:28px;
+    padding-right:28px;
+  }
+
   .btn-copy { background:var(--grey); }
+
   .btn-print:hover { background:var(--red-dark); }
   .btn-copy:hover { background:#555; }
-  .btn-print:active, .btn-copy:active { transform:scale(.97); }
+
+  .btn-print:active,
+  .btn-copy:active {
+    transform:scale(.97);
+  }
 
   @media (max-width:760px) {
     body { padding:18px 12px 96px; }
@@ -234,8 +370,10 @@
   }
 </style>
 </head>
+
 <body>
 <div class="page">
+
   <div class="doc-header">
     <div class="logo-wrap">
       <img src="https://salisbury.maps.arcgis.com/sharing/rest/content/items/33492bb1f8584dca9449da8c155f936a/data" alt="Salisbury Fire Department">
@@ -376,6 +514,7 @@
       </div>
     </div>
   </div>
+
 </div>
 
 <div class="print-bar">
@@ -395,7 +534,7 @@
 </div>
 
 <script>
-const PRINT_URL = 'https://sbygis.github.io/Logistics/DamgedMIssingEquipment.html';
+const PRINT_URL = 'https://sbygis.github.io/Logistics/DamgedMissingEquipment.html';
 const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/service_2cfaace4353448db9fec311a0fc3f828/FeatureServer';
 const PARENT_LAYER = BASE + '/0';
 const CHILD_TABLE = BASE + '/1';
@@ -411,10 +550,12 @@ function escapeHTML(value) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
 function value(a, field) {
   const v = a ? a[field] : null;
   return v != null && String(v).trim() !== '' ? v : '';
 }
+
 function firstValue(a, fields) {
   for (const field of fields) {
     const v = value(a, field);
@@ -422,50 +563,62 @@ function firstValue(a, fields) {
   }
   return '';
 }
+
 function setText(id, val, fallback) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = val != null && String(val).trim() !== '' ? val : (fallback || '—');
 }
+
 function setHTML(id, html, fallback) {
   const el = document.getElementById(id);
   if (!el) return;
   el.innerHTML = html && String(html).trim() !== '' ? html : (fallback || '—');
 }
+
 function hideIfEmpty(rowId, val) {
   const row = document.getElementById(rowId);
   if (!row) return;
   if (!val || String(val).trim() === '') row.classList.add('hidden');
 }
+
 function fmtDate(epoch) {
   if (!epoch) return '';
   const d = new Date(epoch);
   if (isNaN(d.getTime())) return String(epoch);
   return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 }
+
 function fmtDateTime(epoch) {
   if (!epoch) return '';
   const d = new Date(epoch);
   if (isNaN(d.getTime())) return String(epoch);
   return d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
 }
+
 function statusBadge(status) {
   if (!status) return '—';
+
   const s = String(status);
   const key = s.toLowerCase();
   let cls = 'status-badge';
+
   if (key === 'submitted') cls += ' submitted';
   if (key === 'completed' || key === 'complete') cls += ' completed';
   if (key === 'cancelled' || key === 'canceled') cls += ' cancelled';
+
   return '<span class="' + cls + '">' + escapeHTML(s) + '</span>';
 }
+
 function typeBadge(typeValue) {
   if (!typeValue) return '—';
   return '<span class="type-badge">' + escapeHTML(typeValue) + '</span>';
 }
+
 function yes(v) {
   return String(v || '').toLowerCase().trim() === 'yes';
 }
+
 function contextText(a) {
   const direct = value(a, 'context');
   if (direct) return direct;
@@ -475,20 +628,24 @@ function contextText(a) {
   if (yes(a.training_context)) parts.push('Training');
   if (yes(a.service_call_context)) parts.push('Service Call');
   if (yes(a.other_context)) parts.push('Other');
+
   return parts.join(', ');
 }
+
 function damageTypeText(a) {
   const main = value(a, 'damaged_or_missing');
   const type = value(a, 'damage_type');
   if (main && type) return main + ' - ' + type;
   return main || type;
 }
+
 function mvaText(a) {
   const note = value(a, 'mva_note');
   const link = value(a, 'mva_link');
-  if (note && link) return escapeHTML(note) + '\n' + escapeHTML(link);
-  return escapeHTML(note || link);
+  if (note && link) return note + '\n' + link;
+  return note || link;
 }
+
 function populateDetails(a) {
   const status = firstValue(a, ['request_status', 'status', 'status_flag']);
   const dt = value(a, 'date_time_damaged') ? fmtDateTime(a.date_time_damaged) : firstValue(a, ['formatted_date']) || fmtDate(a.date_damaged);
@@ -517,6 +674,7 @@ function populateDetails(a) {
   setText('f-other-damage', otherDamage);
   setText('f-notes', notes);
   setText('f-mva', mva);
+
   hideIfEmpty('other-damage-row', otherDamage);
   hideIfEmpty('notes-row', notes);
   hideIfEmpty('mva-row', mva);
@@ -531,6 +689,7 @@ function populateDetails(a) {
     '<div>' + escapeHTML(dt || '') + '</div>' +
     '<div style="font-size:10px;opacity:.55;margin-top:2px;">OID ' + escapeHTML(a.objectid || '') + '</div>';
 }
+
 function populateFromParams() {
   const a = {
     name:p.get('name') || '',
@@ -543,9 +702,12 @@ function populateFromParams() {
     context:p.get('context') || '',
     objectid:p.get('oid') || ''
   };
+
   populateDetails(a);
-  document.getElementById('witness-tbody').innerHTML = '<tr class="empty-row"><td colspan="2">No GlobalID was provided, so witnesses could not be loaded from ArcGIS.</td></tr>';
+  document.getElementById('witness-tbody').innerHTML =
+    '<tr class="empty-row"><td colspan="2">No GlobalID was provided, so witnesses could not be loaded from ArcGIS.</td></tr>';
 }
+
 async function loadParent() {
   if (!gid) {
     populateFromParams();
@@ -555,6 +717,7 @@ async function loadParent() {
   try {
     const url = PARENT_LAYER + '/query?where=globalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=*&f=json';
     const data = await fetch(url).then(r => r.json());
+
     if (data.error) throw new Error(data.error.message);
     if (!data.features || !data.features.length) throw new Error('No report found for this GlobalID.');
 
@@ -562,10 +725,12 @@ async function loadParent() {
     populateDetails(a);
   } catch (e) {
     console.error(e);
-    document.getElementById('witness-tbody').innerHTML = '<tr><td colspan="2" class="err">Could not load report: ' + escapeHTML(e.message) + '</td></tr>';
+    document.getElementById('witness-tbody').innerHTML =
+      '<tr><td colspan="2" class="err">Could not load report: ' + escapeHTML(e.message) + '</td></tr>';
     populateFromParams();
   }
 }
+
 async function loadWitnesses() {
   const tbody = document.getElementById('witness-tbody');
   if (!gid) return;
@@ -574,6 +739,7 @@ async function loadWitnesses() {
     const fields = 'objectid,witness_name';
     const url = CHILD_TABLE + '/query?where=parentglobalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=' + fields + '&orderByFields=objectid+ASC&f=json';
     const data = await fetch(url).then(r => r.json());
+
     if (data.error) throw new Error(data.error.message);
 
     const feats = data.features || [];
@@ -591,14 +757,18 @@ async function loadWitnesses() {
     }).join('');
   } catch (e) {
     console.error(e);
-    tbody.innerHTML = '<tr><td colspan="2" class="err">Could not load witnesses: ' + escapeHTML(e.message) + '</td></tr>';
+    tbody.innerHTML =
+      '<tr><td colspan="2" class="err">Could not load witnesses: ' + escapeHTML(e.message) + '</td></tr>';
   }
 }
+
 function copyLink() {
   const btn = document.getElementById('btn-copy');
+
   navigator.clipboard.writeText(window.location.href).then(() => {
     btn.textContent = '✓ Copied!';
     btn.style.background = '#2d7a2d';
+
     setTimeout(() => {
       btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Link';
       btn.style.background = '';
@@ -611,4 +781,3 @@ loadWitnesses();
 </script>
 </body>
 </html>
-
