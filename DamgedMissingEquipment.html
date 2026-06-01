@@ -12,22 +12,14 @@
     --red-dark:#8f1212;
     --red-light:#fff2f2;
     --grey:#3d3d3d;
-    --grey-mid:#5c5c5c;
     --grey-light:#f4f4f4;
     --rule:#ddd;
     --text:#1e1e1e;
     --muted:#777;
-    --white:#ffffff;
+    --white:#fff;
     --bg:#e8e8e8;
     --gold:#c8a84b;
-    --green:#2f7d32;
-    --green-light:#edf7ed;
-    --blue:#245b89;
-    --blue-light:#eef6ff;
-    --orange:#b76512;
-    --orange-light:#fff6ec;
   }
-
   body {
     font-family:'DM Sans',sans-serif;
     background:var(--bg);
@@ -38,9 +30,7 @@
     flex-direction:column;
     align-items:center;
   }
-
   .page { width:100%; max-width:860px; }
-
   .doc-header {
     display:flex;
     align-items:center;
@@ -53,7 +43,6 @@
     border:2px solid rgba(200,168,75,.35);
     box-shadow:0 4px 24px rgba(143,18,18,.35);
   }
-
   .logo-wrap {
     width:72px;
     height:72px;
@@ -62,15 +51,8 @@
     align-items:center;
     justify-content:center;
   }
-
-  .logo-wrap img {
-    width:100%;
-    height:100%;
-    object-fit:contain;
-  }
-
+  .logo-wrap img { width:100%; height:100%; object-fit:contain; }
   .doc-header-text { flex:1; }
-
   .agency {
     font-size:10px;
     font-weight:600;
@@ -79,21 +61,8 @@
     color:var(--gold);
     margin-bottom:3px;
   }
-
-  .doc-title {
-    font-size:23px;
-    font-weight:700;
-    color:var(--white);
-    line-height:1.08;
-  }
-
-  .doc-subtitle {
-    font-size:11px;
-    color:rgba(255,255,255,.60);
-    margin-top:3px;
-    letter-spacing:.04em;
-  }
-
+  .doc-title { font-size:23px; font-weight:700; color:var(--white); line-height:1.08; }
+  .doc-subtitle { font-size:11px; color:rgba(255,255,255,.60); margin-top:3px; letter-spacing:.04em; }
   .doc-meta {
     font-family:'DM Mono',monospace;
     font-size:11px;
@@ -102,7 +71,6 @@
     line-height:1.9;
     flex-shrink:0;
   }
-
   .card {
     background:var(--white);
     border-radius:10px;
@@ -111,48 +79,21 @@
     border:1px solid var(--rule);
     overflow:hidden;
   }
-
   .card-head {
     background:var(--grey);
     color:var(--white);
     padding:12px 20px;
     display:flex;
     align-items:center;
-    justify-content:space-between;
     gap:10px;
     border-left:4px solid var(--red);
   }
-
-  .card-head-left {
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-
   .card-head .ico { font-size:15px; }
-
-  .card-head h2 {
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-  }
-
+  .card-head h2 { font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
   .card-body { padding:16px 20px; }
-
-  .fields {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:0 22px;
-  }
-
-  .field {
-    padding:10px 0;
-    border-bottom:1px solid #eee;
-  }
-
+  .fields { display:grid; grid-template-columns:1fr 1fr; gap:0 22px; }
+  .field { padding:10px 0; border-bottom:1px solid #eee; }
   .field.full { grid-column:1/-1; }
-
   .fl {
     font-size:9px;
     font-weight:700;
@@ -161,51 +102,8 @@
     color:var(--muted);
     margin-bottom:3px;
   }
-
-  .fv {
-    font-size:13px;
-    font-weight:500;
-    color:var(--text);
-    min-height:18px;
-  }
-
-  .fv.long {
-    font-weight:400;
-    line-height:1.55;
-    white-space:pre-wrap;
-  }
-
-  .status-badge {
-    display:inline-block;
-    border-radius:999px;
-    padding:4px 10px;
-    font-size:10px;
-    font-weight:800;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:var(--blue);
-    background:var(--blue-light);
-    border:1px solid #b9d7f3;
-  }
-
-  .status-badge.submitted {
-    color:var(--orange);
-    background:var(--orange-light);
-    border-color:#f0c99d;
-  }
-
-  .status-badge.completed {
-    color:var(--green);
-    background:var(--green-light);
-    border-color:#b9ddb9;
-  }
-
-  .status-badge.cancelled {
-    color:#555;
-    background:#f1f1f1;
-    border-color:#d2d2d2;
-  }
-
+  .fv { font-size:13px; font-weight:500; color:var(--text); min-height:18px; }
+  .fv.long { font-weight:400; line-height:1.55; white-space:pre-wrap; }
   .type-badge {
     display:inline-block;
     border-radius:999px;
@@ -218,18 +116,21 @@
     background:var(--red-light);
     border:1px solid #f0b3b3;
   }
-
-  .witness-table {
-    width:100%;
-    border-collapse:collapse;
-    font-size:13px;
+  .status-wrap { padding:4px 20px 18px; border-top:1px solid #eee; }
+  .status-wrap .fl { margin-bottom:8px; }
+  .sbar { display:flex; gap:3px; margin-bottom:5px; }
+  .seg { flex:1; height:13px; border-radius:3px; background:#e5e5e5; }
+  .seg.active-seg {
+    box-shadow:0 3px 8px rgba(0,0,0,.35),0 1px 3px rgba(0,0,0,.2);
+    transform:scaleY(1.1);
+    transform-origin:bottom;
   }
-
-  .witness-table thead tr {
-    background:var(--grey-light);
-    border-bottom:2px solid var(--rule);
-  }
-
+  .snames { display:flex; gap:3px; }
+  .sname { flex:1; font-size:9.5px; text-align:center; color:var(--muted); font-weight:500; }
+  .sname.active { color:var(--text); font-weight:700; }
+  #status-text-label { display:none !important; }
+  .witness-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .witness-table thead tr { background:var(--grey-light); border-bottom:2px solid var(--rule); }
   .witness-table th {
     padding:9px 12px;
     text-align:left;
@@ -239,37 +140,12 @@
     text-transform:uppercase;
     color:var(--muted);
   }
-
-  .witness-table th.c,
-  .witness-table td.c {
-    text-align:center;
-  }
-
-  .witness-table tbody tr {
-    border-bottom:1px solid #eee;
-  }
-
-  .witness-table tbody tr:last-child {
-    border-bottom:none;
-  }
-
-  .witness-table td {
-    padding:10px 12px;
-    color:var(--text);
-  }
-
-  .witness-table td.mono {
-    font-family:'DM Mono',monospace;
-    font-size:12px;
-  }
-
-  .loading {
-    padding:24px;
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
-  }
-
+  .witness-table th.c, .witness-table td.c { text-align:center; }
+  .witness-table tbody tr { border-bottom:1px solid #eee; }
+  .witness-table tbody tr:last-child { border-bottom:none; }
+  .witness-table td { padding:10px 12px; color:var(--text); }
+  .witness-table td.mono { font-family:'DM Mono',monospace; font-size:12px; }
+  .loading { padding:24px; text-align:center; color:var(--muted); font-size:13px; }
   .loading .spinner {
     width:20px;
     height:20px;
@@ -280,28 +156,10 @@
     display:inline-block;
     margin-bottom:8px;
   }
-
-  @keyframes spin {
-    to { transform:rotate(360deg); }
-  }
-
-  .err {
-    padding:14px;
-    color:#c0392b;
-    font-size:13px;
-    background:#fff5f5;
-    border:1px solid #ffd7d7;
-    border-radius:8px;
-  }
-
-  .empty-row td {
-    color:var(--muted);
-    font-style:italic;
-    padding:18px 12px;
-  }
-
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .err { padding:14px; color:#c0392b; font-size:13px; background:#fff5f5; border:1px solid #ffd7d7; border-radius:8px; }
+  .empty-row td { color:var(--muted); font-style:italic; padding:18px 12px; }
   .hidden { display:none !important; }
-
   .print-bar {
     position:fixed;
     bottom:0;
@@ -317,9 +175,7 @@
     z-index:100;
     box-shadow:0 -4px 16px rgba(0,0,0,.08);
   }
-
-  .btn-print,
-  .btn-copy {
+  .btn-print, .btn-copy {
     color:var(--white);
     border:none;
     border-radius:7px;
@@ -334,23 +190,11 @@
     gap:8px;
     transition:background .2s, transform .1s;
   }
-
-  .btn-print {
-    background:var(--red);
-    padding-left:28px;
-    padding-right:28px;
-  }
-
+  .btn-print { background:var(--red); padding-left:28px; padding-right:28px; }
   .btn-copy { background:var(--grey); }
-
   .btn-print:hover { background:var(--red-dark); }
   .btn-copy:hover { background:#555; }
-
-  .btn-print:active,
-  .btn-copy:active {
-    transform:scale(.97);
-  }
-
+  .btn-print:active, .btn-copy:active { transform:scale(.97); }
   @media (max-width:760px) {
     body { padding:18px 12px 96px; }
     .doc-header { align-items:flex-start; padding:16px; }
@@ -358,22 +202,20 @@
     .doc-meta { display:none; }
     .fields { grid-template-columns:1fr; }
   }
-
   @media print {
     body { background:white; padding:0; }
     .print-bar { display:none; }
     .card { box-shadow:none; border-radius:6px; page-break-inside:avoid; }
     .page { max-width:100%; }
     * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    #status-text-label { display:block !important; }
     .card-head { background:var(--grey) !important; color:white !important; }
     .doc-header { background:#8f1212 !important; }
   }
 </style>
 </head>
-
 <body>
 <div class="page">
-
   <div class="doc-header">
     <div class="logo-wrap">
       <img src="https://salisbury.maps.arcgis.com/sharing/rest/content/items/33492bb1f8584dca9449da8c155f936a/data" alt="Salisbury Fire Department">
@@ -387,9 +229,7 @@
   </div>
 
   <div class="card">
-    <div class="card-head">
-      <div class="card-head-left"><span class="ico">📋</span><h2>Report Details</h2></div>
-    </div>
+    <div class="card-head"><span class="ico">📋</span><h2>Report Details</h2></div>
     <div class="card-body">
       <div class="fields">
         <div class="field">
@@ -403,10 +243,6 @@
         <div class="field">
           <div class="fl">Damaged or Missing</div>
           <div class="fv" id="f-damaged-missing">—</div>
-        </div>
-        <div class="field">
-          <div class="fl">Report Status</div>
-          <div class="fv" id="f-status">—</div>
         </div>
         <div class="field">
           <div class="fl">Date / Time Discovered</div>
@@ -424,18 +260,36 @@
           <div class="fl">Incident Context</div>
           <div class="fv" id="f-context">—</div>
         </div>
-        <div class="field full">
+        <div class="field">
           <div class="fl">Notification Recipient</div>
           <div class="fv" id="f-notify">—</div>
         </div>
       </div>
     </div>
+    <div class="status-wrap">
+      <div class="fl">Status</div>
+      <div class="sbar">
+        <div class="seg" id="seg1"></div>
+        <div class="seg" id="seg2"></div>
+        <div class="seg" id="seg3"></div>
+        <div class="seg" id="seg4"></div>
+        <div class="seg" id="seg5"></div>
+      </div>
+      <div class="snames">
+        <div class="sname" id="sn1">Submitted</div>
+        <div class="sname" id="sn2">Received</div>
+        <div class="sname" id="sn3">Under Repair</div>
+        <div class="sname" id="sn4">Repaired</div>
+        <div class="sname" id="sn5">Completed</div>
+      </div>
+      <div id="status-text-label" style="font-size:12px;font-weight:600;color:var(--text);margin-top:6px;">
+        Current Status: <span id="status-text-value"></span>
+      </div>
+    </div>
   </div>
 
   <div class="card">
-    <div class="card-head">
-      <div class="card-head-left"><span class="ico">📍</span><h2>Location and Damage Description</h2></div>
-    </div>
+    <div class="card-head"><span class="ico">📍</span><h2>Location and Damage Description</h2></div>
     <div class="card-body">
       <div class="fields">
         <div class="field full">
@@ -471,9 +325,7 @@
   </div>
 
   <div class="card">
-    <div class="card-head">
-      <div class="card-head-left"><span class="ico">👥</span><h2>Witness Details</h2></div>
-    </div>
+    <div class="card-head"><span class="ico">👥</span><h2>Witness Details</h2></div>
     <div>
       <table class="witness-table">
         <thead>
@@ -490,9 +342,7 @@
   </div>
 
   <div class="card">
-    <div class="card-head">
-      <div class="card-head-left"><span class="ico">✍️</span><h2>Signatures</h2></div>
-    </div>
+    <div class="card-head"><span class="ico">✍️</span><h2>Signatures</h2></div>
     <div class="card-body">
       <div class="fields">
         <div class="field">
@@ -514,7 +364,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <div class="print-bar">
@@ -541,6 +390,7 @@ const CHILD_TABLE = BASE + '/1';
 
 const p = new URLSearchParams(window.location.search);
 const gid = p.get('globalid');
+let parentWitnessNames = '';
 
 function escapeHTML(value) {
   return String(value == null ? '' : value)
@@ -550,12 +400,10 @@ function escapeHTML(value) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
-
 function value(a, field) {
   const v = a ? a[field] : null;
   return v != null && String(v).trim() !== '' ? v : '';
 }
-
 function firstValue(a, fields) {
   for (const field of fields) {
     const v = value(a, field);
@@ -563,87 +411,99 @@ function firstValue(a, fields) {
   }
   return '';
 }
-
 function setText(id, val, fallback) {
   const el = document.getElementById(id);
   if (!el) return;
   el.textContent = val != null && String(val).trim() !== '' ? val : (fallback || '—');
 }
-
 function setHTML(id, html, fallback) {
   const el = document.getElementById(id);
   if (!el) return;
   el.innerHTML = html && String(html).trim() !== '' ? html : (fallback || '—');
 }
-
 function hideIfEmpty(rowId, val) {
   const row = document.getElementById(rowId);
   if (!row) return;
   if (!val || String(val).trim() === '') row.classList.add('hidden');
 }
-
 function fmtDate(epoch) {
   if (!epoch) return '';
   const d = new Date(epoch);
   if (isNaN(d.getTime())) return String(epoch);
   return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 }
-
 function fmtDateTime(epoch) {
   if (!epoch) return '';
   const d = new Date(epoch);
   if (isNaN(d.getTime())) return String(epoch);
   return d.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' });
 }
-
-function statusBadge(status) {
-  if (!status) return '—';
-
-  const s = String(status);
-  const key = s.toLowerCase();
-  let cls = 'status-badge';
-
-  if (key === 'submitted') cls += ' submitted';
-  if (key === 'completed' || key === 'complete') cls += ' completed';
-  if (key === 'cancelled' || key === 'canceled') cls += ' cancelled';
-
-  return '<span class="' + cls + '">' + escapeHTML(s) + '</span>';
-}
-
 function typeBadge(typeValue) {
   if (!typeValue) return '—';
   return '<span class="type-badge">' + escapeHTML(typeValue) + '</span>';
 }
-
 function yes(v) {
   return String(v || '').toLowerCase().trim() === 'yes';
 }
-
 function contextText(a) {
   const direct = value(a, 'context');
   if (direct) return direct;
-
   const parts = [];
   if (yes(a.alarm_context)) parts.push('Alarm');
   if (yes(a.training_context)) parts.push('Training');
   if (yes(a.service_call_context)) parts.push('Service Call');
   if (yes(a.other_context)) parts.push('Other');
-
   return parts.join(', ');
 }
-
 function damageTypeText(a) {
   const main = value(a, 'damaged_or_missing');
   const type = value(a, 'damage_type');
   if (main && type) return main + ' - ' + type;
   return main || type;
 }
-
 function mvaText(a) {
   const note = value(a, 'mva_note');
   const link = value(a, 'mva_link');
-  if (note && link) return note + '\n' + link;
+  if (note && link) return note + String.fromCharCode(10) + link;
   return note || link;
+}
+
+const STATUS_COLORS = ['#ed4d18', '#e89d00', '#fad82d', '#c4da4b', '#83c96e'];
+function statusIndex(status) {
+  const s = String(status || '').toLowerCase().trim();
+  if (s === 'submitted') return 1;
+  if (s === 'received') return 2;
+  if (s === 'under repair' || s === 'in repair') return 3;
+  if (s === 'repaired' || s === 'repair completed') return 4;
+  if (s === 'completed' || s === 'complete' || s === 'closed') return 5;
+  return 0;
+}
+function renderStatus(status) {
+  const s = String(status || '').trim();
+  const lower = s.toLowerCase();
+  const isCancelled = lower === 'cancelled' || lower === 'canceled';
+  const activeIdx = isCancelled ? 5 : statusIndex(s);
+
+  for (let i = 1; i <= 5; i++) {
+    const seg = document.getElementById('seg' + i);
+    const sn = document.getElementById('sn' + i);
+    if (!seg || !sn) continue;
+    seg.style.background = '#e5e5e5';
+    seg.classList.remove('active-seg');
+    sn.classList.remove('active');
+    if (activeIdx > 0 && i <= activeIdx) seg.style.background = isCancelled ? '#58595b' : STATUS_COLORS[i - 1];
+    if (activeIdx > 0 && i === activeIdx) {
+      seg.classList.add('active-seg');
+      sn.classList.add('active');
+    }
+  }
+
+  if (isCancelled) {
+    const sn5 = document.getElementById('sn5');
+    if (sn5) sn5.textContent = 'Cancelled';
+  }
+  const tv = document.getElementById('status-text-value');
+  if (tv) tv.textContent = s || '—';
 }
 
 function populateDetails(a) {
@@ -656,16 +516,17 @@ function populateDetails(a) {
   const otherDamage = value(a, 'damage_type_other');
   const notes = value(a, 'report_notes');
   const mva = mvaText(a);
+  parentWitnessNames = value(a, 'witness_name');
 
   setText('f-name', a.name);
   setText('f-email', a.email);
   setHTML('f-damaged-missing', typeBadge(damageTypeText(a)));
-  setHTML('f-status', statusBadge(status));
   setText('f-date-time', dt);
   setText('f-alarm', a.alarm_number);
   setText('f-unit', a.unit_damaged);
   setText('f-context', contextText(a));
   setText('f-notify', a.notify);
+  renderStatus(status);
 
   setText('f-location', location);
   setText('f-specific', specific);
@@ -674,7 +535,6 @@ function populateDetails(a) {
   setText('f-other-damage', otherDamage);
   setText('f-notes', notes);
   setText('f-mva', mva);
-
   hideIfEmpty('other-damage-row', otherDamage);
   hideIfEmpty('notes-row', notes);
   hideIfEmpty('mva-row', mva);
@@ -689,7 +549,6 @@ function populateDetails(a) {
     '<div>' + escapeHTML(dt || '') + '</div>' +
     '<div style="font-size:10px;opacity:.55;margin-top:2px;">OID ' + escapeHTML(a.objectid || '') + '</div>';
 }
-
 function populateFromParams() {
   const a = {
     name:p.get('name') || '',
@@ -700,84 +559,101 @@ function populateFromParams() {
     alarm_number:p.get('alarm') || '',
     unit_damaged:p.get('unit') || '',
     context:p.get('context') || '',
+    witness_name:p.get('witnesses') || '',
     objectid:p.get('oid') || ''
   };
-
   populateDetails(a);
-  document.getElementById('witness-tbody').innerHTML =
-    '<tr class="empty-row"><td colspan="2">No GlobalID was provided, so witnesses could not be loaded from ArcGIS.</td></tr>';
 }
-
 async function loadParent() {
   if (!gid) {
     populateFromParams();
-    return;
+    return null;
   }
-
   try {
     const url = PARENT_LAYER + '/query?where=globalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=*&f=json';
     const data = await fetch(url).then(r => r.json());
-
     if (data.error) throw new Error(data.error.message);
     if (!data.features || !data.features.length) throw new Error('No report found for this GlobalID.');
-
     const a = data.features[0].attributes;
     populateDetails(a);
+    return a;
   } catch (e) {
     console.error(e);
-    document.getElementById('witness-tbody').innerHTML =
-      '<tr><td colspan="2" class="err">Could not load report: ' + escapeHTML(e.message) + '</td></tr>';
+    document.getElementById('witness-tbody').innerHTML = '<tr><td colspan="2" class="err">Could not load report: ' + escapeHTML(e.message) + '</td></tr>';
     populateFromParams();
+    return null;
   }
 }
-
-async function loadWitnesses() {
+function addWitnessText(names, seen, text) {
+  if (!text) return;
+  String(text).split(',').forEach(name => {
+    const clean = name.trim();
+    if (!clean) return;
+    const key = clean.toLowerCase();
+    if (seen[key]) return;
+    seen[key] = true;
+    names.push(clean);
+  });
+}
+function renderWitnessRows(names, emptyMessage) {
   const tbody = document.getElementById('witness-tbody');
-  if (!gid) return;
+  if (!names.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="2">' + escapeHTML(emptyMessage || 'No witnesses listed for this report.') + '</td></tr>';
+    return;
+  }
+  tbody.innerHTML = names.map((name, idx) => {
+    return '<tr>' +
+      '<td class="c mono">' + (idx + 1) + '</td>' +
+      '<td>' + escapeHTML(name) + '</td>' +
+    '</tr>';
+  }).join('');
+}
+async function loadWitnesses() {
+  const names = [];
+  const seen = {};
+  addWitnessText(names, seen, parentWitnessNames);
+
+  if (!gid) {
+    renderWitnessRows(names, names.length ? '' : 'No GlobalID was provided, so witnesses could not be loaded from ArcGIS.');
+    return;
+  }
 
   try {
     const fields = 'objectid,witness_name';
     const url = CHILD_TABLE + '/query?where=parentglobalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=' + fields + '&orderByFields=objectid+ASC&f=json';
     const data = await fetch(url).then(r => r.json());
-
     if (data.error) throw new Error(data.error.message);
-
     const feats = data.features || [];
-    if (!feats.length) {
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="2">No witnesses listed for this report.</td></tr>';
-      return;
-    }
-
-    tbody.innerHTML = feats.map((f, idx) => {
+    feats.forEach(f => {
       const a = f.attributes || {};
-      return '<tr>' +
-        '<td class="c mono">' + (idx + 1) + '</td>' +
-        '<td>' + escapeHTML(a.witness_name || '—') + '</td>' +
-      '</tr>';
-    }).join('');
+      addWitnessText(names, seen, a.witness_name || '');
+    });
+    renderWitnessRows(names, 'No witnesses listed for this report.');
   } catch (e) {
     console.error(e);
-    tbody.innerHTML =
-      '<tr><td colspan="2" class="err">Could not load witnesses: ' + escapeHTML(e.message) + '</td></tr>';
+    if (names.length) {
+      renderWitnessRows(names, '');
+    } else {
+      document.getElementById('witness-tbody').innerHTML = '<tr><td colspan="2" class="err">Could not load witnesses: ' + escapeHTML(e.message) + '</td></tr>';
+    }
   }
 }
-
 function copyLink() {
   const btn = document.getElementById('btn-copy');
-
   navigator.clipboard.writeText(window.location.href).then(() => {
     btn.textContent = '✓ Copied!';
     btn.style.background = '#2d7a2d';
-
     setTimeout(() => {
       btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Link';
       btn.style.background = '';
     }, 2000);
   });
 }
-
-loadParent();
-loadWitnesses();
+async function init() {
+  await loadParent();
+  await loadWitnesses();
+}
+init();
 </script>
 </body>
 </html>
