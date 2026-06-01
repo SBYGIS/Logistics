@@ -179,12 +179,6 @@
     min-height:18px;
   }
 
-  .fv.long {
-    font-weight:400;
-    line-height:1.55;
-    white-space:pre-wrap;
-  }
-
   .station-badge {
     display:inline-block;
     border-radius:999px;
@@ -462,7 +456,7 @@
 
 <script>
 const PRINT_URL = 'https://sbygis.github.io/Logistics/FacilitiesInspection.html';
-const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/SFD_Facilities_Inspection_Editor_View/FeatureServer';
+const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/service_7a1c120d3f2542c0be9e7110b3602626/FeatureServer';
 const PARENT_LAYER = BASE + '/0';
 
 const p = new URLSearchParams(window.location.search);
@@ -503,13 +497,19 @@ function fmtDate(epoch) {
   return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 }
 
+function displayDate(value) {
+  if (!value) return '';
+  if (isNaN(Number(value))) return String(value);
+  return fmtDate(value);
+}
+
 function selectedStationKey(station) {
   const s = String(station || '').toLowerCase();
 
   if (s.indexOf('16') > -1) return 'station16';
   if (s.indexOf('2') > -1) return 'station2';
-  if (s.indexOf('1') > -1) return 'station1';
   if (s.indexOf('admin') > -1 || s.indexOf('administrative') > -1) return 'admin';
+  if (s.indexOf('1') > -1) return 'station1';
 
   return '';
 }
@@ -657,12 +657,11 @@ function populateDetails(a) {
   const key = selectedStationKey(station);
   const cfg = STATION_CONFIG[key];
 
-  const dateValue = cfg ? firstValue(a, ['formatted_date'].concat(cfg.dateFields)) : firstValue(a, ['formatted_date', 'inspection_date']);
-  const finalDate = dateValue && isNaN(Number(dateValue)) ? dateValue : fmtDate(dateValue);
+  const dateRaw = cfg ? firstValue(a, ['formatted_date'].concat(cfg.dateFields)) : firstValue(a, ['formatted_date', 'inspection_date']);
+  const finalDate = displayDate(dateRaw);
   const assistantChief = cfg ? firstValue(a, cfg.assistantFields) : value(a, 'assistant_chief');
   const deputyChief = cfg ? firstValue(a, cfg.deputyFields) : value(a, 'deputy_chief');
 
-  setText('f-station', station);
   document.getElementById('f-station').innerHTML = '<span class="station-badge">' + escapeHTML(station || '-') + '</span>';
   setText('f-date', finalDate);
   setText('f-assistant-chief', assistantChief);
