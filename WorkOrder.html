@@ -473,8 +473,8 @@
       <div class="snames">
         <div class="sname" id="sn1">Submitted</div>
         <div class="sname" id="sn2">Received</div>
-        <div class="sname" id="sn3">Under Repair</div>
-        <div class="sname" id="sn4">Awaiting Parts</div>
+        <div class="sname" id="sn3">Awaiting Parts</div>
+        <div class="sname" id="sn4">Under Repair</div>
         <div class="sname" id="sn5">Repaired</div>
         <div class="sname" id="sn6">Completed</div>
       </div>
@@ -624,15 +624,15 @@ function yes(v) {
   return s === 'yes';
 }
 
-const STATUS_COLORS = ['#ed4d18', '#e89d00', '#fad82d', '#4db6e8', '#c4da4b', '#83c96e'];
+const STATUS_COLORS = ['#ed4d18', '#e89d00', '#fad82d', '#c4da4b', '#a6d96a', '#83c96e'];
 
 function statusIndex(status) {
   const s = String(status || '').toLowerCase().trim();
 
   if (s === 'submitted') return 1;
   if (s === 'received') return 2;
-  if (s === 'under repair' || s === 'in repair') return 3;
-  if (s === 'awaiting parts' || s === 'waiting for parts' || s === 'parts ordered') return 4;
+  if (s === 'awaiting parts' || s === 'waiting for parts' || s === 'parts ordered') return 3;
+  if (s === 'under repair' || s === 'in repair') return 4;
   if (s === 'repaired' || s === 'repair completed') return 5;
   if (s === 'completed' || s === 'complete' || s === 'closed') return 6;
 
