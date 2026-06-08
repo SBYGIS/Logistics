@@ -247,10 +247,11 @@
 
   .sname {
     flex:1;
-    font-size:9px;
+    font-size:8px;
     text-align:center;
     color:var(--muted);
     font-weight:500;
+    line-height:1.15;
   }
 
   .sname.active {
@@ -319,28 +320,6 @@
   .btn-print:active,
   .btn-copy:active {
     transform:scale(.97);
-  }
-
-  .loading {
-    padding:24px;
-    text-align:center;
-    color:var(--muted);
-    font-size:13px;
-  }
-
-  .loading .spinner {
-    width:20px;
-    height:20px;
-    border:2px solid #ddd;
-    border-top-color:var(--red);
-    border-radius:50%;
-    animation:spin .7s linear infinite;
-    display:inline-block;
-    margin-bottom:8px;
-  }
-
-  @keyframes spin {
-    to { transform:rotate(360deg); }
   }
 
   .err {
@@ -489,13 +468,15 @@
         <div class="seg" id="seg3"></div>
         <div class="seg" id="seg4"></div>
         <div class="seg" id="seg5"></div>
+        <div class="seg" id="seg6"></div>
       </div>
       <div class="snames">
         <div class="sname" id="sn1">Submitted</div>
         <div class="sname" id="sn2">Received</div>
         <div class="sname" id="sn3">Under Repair</div>
-        <div class="sname" id="sn4">Repaired</div>
-        <div class="sname" id="sn5">Completed</div>
+        <div class="sname" id="sn4">Awaiting Parts</div>
+        <div class="sname" id="sn5">Repaired</div>
+        <div class="sname" id="sn6">Completed</div>
       </div>
       <div class="status-current">Current Status: <span id="f-status">-</span></div>
     </div>
@@ -643,7 +624,7 @@ function yes(v) {
   return s === 'yes';
 }
 
-const STATUS_COLORS = ['#ed4d18', '#e89d00', '#fad82d', '#c4da4b', '#83c96e'];
+const STATUS_COLORS = ['#ed4d18', '#e89d00', '#fad82d', '#4db6e8', '#c4da4b', '#83c96e'];
 
 function statusIndex(status) {
   const s = String(status || '').toLowerCase().trim();
@@ -651,8 +632,9 @@ function statusIndex(status) {
   if (s === 'submitted') return 1;
   if (s === 'received') return 2;
   if (s === 'under repair' || s === 'in repair') return 3;
-  if (s === 'repaired' || s === 'repair completed') return 4;
-  if (s === 'completed' || s === 'complete' || s === 'closed') return 5;
+  if (s === 'awaiting parts' || s === 'waiting for parts' || s === 'parts ordered') return 4;
+  if (s === 'repaired' || s === 'repair completed') return 5;
+  if (s === 'completed' || s === 'complete' || s === 'closed') return 6;
 
   return 0;
 }
@@ -661,9 +643,9 @@ function renderStatus(status) {
   const s = String(status || '').trim();
   const lower = s.toLowerCase();
   const isCancelled = lower === 'cancelled' || lower === 'canceled';
-  const activeIdx = isCancelled ? 5 : statusIndex(s);
+  const activeIdx = isCancelled ? 6 : statusIndex(s);
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 6; i++) {
     const seg = document.getElementById('seg' + i);
     const sn = document.getElementById('sn' + i);
 
@@ -684,8 +666,8 @@ function renderStatus(status) {
   }
 
   if (isCancelled) {
-    const sn5 = document.getElementById('sn5');
-    if (sn5) sn5.textContent = 'Cancelled';
+    const sn6 = document.getElementById('sn6');
+    if (sn6) sn6.textContent = 'Cancelled';
   }
 
   setText('f-status', s || '-');
