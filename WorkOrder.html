@@ -266,6 +266,67 @@
     margin-top:8px;
   }
 
+  /* Attachments */
+  .attach-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+    gap:12px;
+  }
+
+  .attach-item {
+    display:flex;
+    flex-direction:column;
+    border:1px solid var(--rule);
+    border-radius:8px;
+    overflow:hidden;
+    text-decoration:none;
+    color:var(--text);
+    background:var(--grey-light);
+    transition:box-shadow .15s, transform .1s;
+  }
+
+  .attach-item:hover {
+    box-shadow:0 4px 14px rgba(0,0,0,.14);
+    transform:translateY(-1px);
+  }
+
+  .attach-thumb {
+    width:100%;
+    height:100px;
+    object-fit:cover;
+    background:#e2e2e2;
+    display:block;
+  }
+
+  .attach-icon {
+    width:100%;
+    height:100px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:30px;
+    background:#e2e2e2;
+  }
+
+  .attach-name {
+    font-size:11px;
+    font-weight:500;
+    padding:6px 8px;
+    word-break:break-word;
+    line-height:1.3;
+  }
+
+  .attach-meta {
+    font-size:10px;
+    color:var(--muted);
+    padding:0 8px 8px;
+  }
+
+  .attach-empty {
+    font-size:12px;
+    color:var(--muted);
+  }
+
   .print-bar {
     position:fixed;
     bottom:0;
@@ -449,333 +510,3 @@
           <div class="fl">Equipment / Item</div>
           <div class="fv" id="f-equipment">-</div>
         </div>
-        <div class="field">
-          <div class="fl">Out of Service</div>
-          <div class="fv" id="f-oos">-</div>
-        </div>
-        <div class="field full">
-          <div class="fl">Notification Recipient</div>
-          <div class="fv" id="f-notify">-</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="status-wrap">
-      <div class="fl">Status</div>
-      <div class="sbar">
-        <div class="seg" id="seg1"></div>
-        <div class="seg" id="seg2"></div>
-        <div class="seg" id="seg3"></div>
-        <div class="seg" id="seg4"></div>
-        <div class="seg" id="seg5"></div>
-        <div class="seg" id="seg6"></div>
-      </div>
-      <div class="snames">
-        <div class="sname" id="sn1">Submitted</div>
-        <div class="sname" id="sn2">Received</div>
-        <div class="sname" id="sn3">Awaiting Parts</div>
-        <div class="sname" id="sn4">Under Repair</div>
-        <div class="sname" id="sn5">Repaired</div>
-        <div class="sname" id="sn6">Completed</div>
-      </div>
-      <div class="status-current">Current Status: <span id="f-status">-</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-head">
-      <div class="card-head-left"><span class="ico">📍</span><h2>Location</h2></div>
-    </div>
-    <div class="card-body">
-      <div class="fields">
-        <div class="field">
-          <div class="fl">Location</div>
-          <div class="fv" id="f-location">-</div>
-        </div>
-        <div class="field">
-          <div class="fl">Location Point / Note</div>
-          <div class="fv" id="f-location-note">-</div>
-        </div>
-        <div class="field full">
-          <div class="fl">Further Location Info</div>
-          <div class="fv long" id="f-location-description">-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-head">
-      <div class="card-head-left"><span class="ico">🛠️</span><h2>Issue and Repairs</h2></div>
-    </div>
-    <div class="card-body">
-      <div class="fields">
-        <div class="field full">
-          <div class="fl">Issue / Problem</div>
-          <div class="fv long" id="f-repair-requested">-</div>
-        </div>
-        <div class="field full">
-          <div class="fl">Troubleshooting Already Attempted</div>
-          <div class="fv long" id="f-repair-description">-</div>
-        </div>
-        <div class="field full" id="scba-row">
-          <div class="fl">Spare SCBA Used</div>
-          <div class="fv" id="f-spare-scba">-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" id="notes-card">
-    <div class="card-head">
-      <div class="card-head-left"><span class="ico">📝</span><h2>Work Order Notes</h2></div>
-    </div>
-    <div class="card-body">
-      <div class="fv long" id="f-notes">-</div>
-    </div>
-  </div>
-
-</div>
-
-<div class="print-bar">
-  <button class="btn-copy" id="btn-copy" onclick="copyLink()">
-    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-    </svg>
-    Copy Link
-  </button>
-  <button class="btn-print" onclick="window.print()">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-      <path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8" rx="1"/>
-      <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
-    </svg>
-    Print / Save PDF
-  </button>
-</div>
-
-<script>
-const PRINT_URL = 'https://sbygis.github.io/Logistics/WorkOrder.html';
-const BASE = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/ArcGIS/rest/services/service_bd92f2b31c6f4ddcbfd71fe807bfc17f/FeatureServer';
-const PARENT_LAYER = BASE + '/0';
-
-const p = new URLSearchParams(window.location.search);
-const gid = p.get('globalid');
-
-function escapeHTML(value) {
-  return String(value == null ? '' : value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function value(a, field) {
-  const v = a ? a[field] : null;
-  return v != null && String(v).trim() !== '' ? v : '';
-}
-
-function firstValue(a, fields) {
-  for (const field of fields) {
-    const v = value(a, field);
-    if (v) return v;
-  }
-  return '';
-}
-
-function setText(id, val, fallback) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = val != null && String(val).trim() !== '' ? val : (fallback || '-');
-}
-
-function setHTML(id, html, fallback) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.innerHTML = html && String(html).trim() !== '' ? html : (fallback || '-');
-}
-
-function hideIfEmpty(id, val) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (!val || String(val).trim() === '') el.classList.add('hidden');
-}
-
-function fmtDate(epoch) {
-  if (!epoch) return '';
-  const d = new Date(epoch);
-  if (isNaN(d.getTime())) return String(epoch);
-  return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
-}
-
-function displayDate(v) {
-  if (!v) return '';
-  if (isNaN(Number(v))) return String(v);
-  return fmtDate(v);
-}
-
-function badge(v, dark) {
-  const cls = dark ? 'badge badge-dark' : 'badge';
-  return '<span class="' + cls + '">' + escapeHTML(v || '-') + '</span>';
-}
-
-function yes(v) {
-  const s = String(v || '').toLowerCase().trim();
-  return s === 'yes';
-}
-
-const STATUS_COLORS = ['#ed4d18', '#e89d00', '#fad82d', '#c4da4b', '#a6d96a', '#83c96e'];
-
-function statusIndex(status) {
-  const s = String(status || '').toLowerCase().trim();
-
-  if (s === 'submitted') return 1;
-  if (s === 'received') return 2;
-  if (s === 'awaiting parts' || s === 'waiting for parts' || s === 'parts ordered') return 3;
-  if (s === 'under repair' || s === 'in repair') return 4;
-  if (s === 'repaired' || s === 'repair completed') return 5;
-  if (s === 'completed' || s === 'complete' || s === 'closed') return 6;
-
-  return 0;
-}
-
-function renderStatus(status) {
-  const s = String(status || '').trim();
-  const lower = s.toLowerCase();
-  const isCancelled = lower === 'cancelled' || lower === 'canceled';
-  const activeIdx = isCancelled ? 6 : statusIndex(s);
-
-  for (let i = 1; i <= 6; i++) {
-    const seg = document.getElementById('seg' + i);
-    const sn = document.getElementById('sn' + i);
-
-    if (!seg || !sn) continue;
-
-    seg.style.background = '#e5e5e5';
-    seg.classList.remove('active-seg');
-    sn.classList.remove('active');
-
-    if (activeIdx > 0 && i <= activeIdx) {
-      seg.style.background = isCancelled ? '#58595b' : STATUS_COLORS[i - 1];
-    }
-
-    if (activeIdx > 0 && i === activeIdx) {
-      seg.classList.add('active-seg');
-      sn.classList.add('active');
-    }
-  }
-
-  if (isCancelled) {
-    const sn6 = document.getElementById('sn6');
-    if (sn6) sn6.textContent = 'Cancelled';
-  }
-
-  setText('f-status', s || '-');
-}
-
-function populateDetails(a) {
-  const finalDate = displayDate(firstValue(a, ['date_formatted', 'formatted_date', 'date_input']));
-  const status = firstValue(a, ['work_order_status', 'status_flag']);
-  const orderType = value(a, 'order_type');
-  const outOfService = value(a, 'equipment_out_of_service');
-  const repairDescription = firstValue(a, ['repair_description_long', 'repair_description']);
-  const locationDescription = firstValue(a, ['location_description_long', 'location_description']);
-  const notes = firstValue(a, ['work_order_notes_long', 'work_order_notes']);
-  const spareScba = value(a, 'spare_scba');
-
-  setText('f-date', finalDate);
-  setText('f-staff', a.staff_input);
-  setText('f-email', a.email);
-  setHTML('f-type', badge(orderType));
-  setHTML('f-station', badge(value(a, 'station_select'), true));
-  setText('f-unit', a.unit_input);
-  setText('f-equipment', a.equipment_input);
-  setHTML('f-oos', badge(outOfService));
-  setText('f-notify', a.notify);
-  renderStatus(status);
-
-  setText('f-location', a.location_input);
-  setText('f-location-note', a.location_note);
-  setText('f-location-description', locationDescription);
-
-  setText('f-repair-requested', a.repair_requested);
-  setText('f-repair-description', repairDescription);
-  setText('f-spare-scba', spareScba);
-  hideIfEmpty('scba-row', spareScba);
-
-  setText('f-notes', notes);
-  if (!notes) {
-    const notesCard = document.getElementById('notes-card');
-    if (notesCard) notesCard.style.display = 'none';
-  }
-
-  if (yes(outOfService)) {
-    const alert = document.getElementById('oos-alert');
-    if (alert) alert.style.display = 'block';
-  }
-
-  document.getElementById('doc-meta').innerHTML =
-    '<div>' + escapeHTML(a.staff_input || '') + '</div>' +
-    '<div>' + escapeHTML(finalDate || '') + '</div>' +
-    '<div style="font-size:10px;opacity:.55;margin-top:2px;">OID ' + escapeHTML(a.objectid || '') + '</div>';
-}
-
-function populateFromParams() {
-  const a = {
-    staff_input:p.get('staff') || '',
-    date_formatted:p.get('date') || '',
-    email:p.get('email') || '',
-    station_select:p.get('station') || '',
-    unit_input:p.get('unit') || '',
-    equipment_input:p.get('equipment') || '',
-    order_type:p.get('type') || '',
-    work_order_status:p.get('status') || '',
-    objectid:p.get('oid') || ''
-  };
-
-  populateDetails(a);
-}
-
-async function loadParent() {
-  if (!gid) {
-    populateFromParams();
-    return;
-  }
-
-  try {
-    const url = PARENT_LAYER + '/query?where=globalid%3D%27' + encodeURIComponent(gid) + '%27&outFields=*&returnGeometry=false&f=json';
-    const data = await fetch(url).then(r => r.json());
-
-    if (data.error) throw new Error(data.error.details ? data.error.details.join(' ') : data.error.message);
-    if (!data.features || !data.features.length) throw new Error('No work order found for this GlobalID.');
-
-    const a = data.features[0].attributes;
-    populateDetails(a);
-  } catch (e) {
-    console.error(e);
-    document.querySelector('.page').insertAdjacentHTML(
-      'beforeend',
-      '<div class="card"><div class="card-body"><div class="err">Could not load work order: ' + escapeHTML(e.message) + '</div></div></div>'
-    );
-    populateFromParams();
-  }
-}
-
-function copyLink() {
-  const btn = document.getElementById('btn-copy');
-
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    btn.textContent = '✓ Copied!';
-    btn.style.background = '#2d7a2d';
-
-    setTimeout(() => {
-      btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Link';
-      btn.style.background = '';
-    }, 2000);
-  });
-}
-
-loadParent();
-</script>
-</body>
-</html>
