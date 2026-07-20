@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Special Projects Request — City of Salisbury</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+  :root {
+    --navy:#17324d;
+    --navy-dark:#102438;
+    --blue:#2d6f9f;
+    --blue-light:#edf6fc;
+    --gold:#c9a227;
+    --green:#3f8f5f;
+    --orange:#d67b22;
+    --hold:#7b8794;
+    --red:#b74c4c;
+    --text:#1f2933;
+    --muted:#6b7785;
+    --rule:#d9e0e6;
+    --panel:#f5f7f9;
+    --white:#ffffff;
+    --bg:#e8edf1;
+  }
+
+  body {
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:32px 20px 100px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .page { width:100%; max-width:900px; }
+
+  .doc-header {
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-bottom:18px;
+    padding:20px 24px;
+    color:var(--white);
+    background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 55%,#234f70 100%);
+    border:1px solid rgba(201,162,39,.55);
+    border-radius:12px;
+    box-shadow:0 5px 22px rgba(16,36,56,.28);
+  }
+
+  .mark {
+    width:70px;
+    height:70px;
+    flex-shrink:0;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.08);
+    border:2px solid rgba(201,162,39,.85);
+    color:var(--gold);
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:.04em;
+  }
+
+  .doc-header-text { flex:1; }
+  .agency {
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:4px;
+  }
+  .doc-title { font-size:25px; font-weight:700; line-height:1.08; }
+  .doc-subtitle { font-size:11px; color:rgba(255,255,255,.66); margin-top:4px; letter-spacing:.04em; }
+
+  .doc-meta {
+    font-family:'DM Mono',monospace;
+    font-size:11px;
+    line-height:1.85;
+    text-align:right;
+    color:rgba(255,255,255,.72);
+    flex-shrink:0;
+  }
+
+  .card {
+    background:var(--white);
+    border:1px solid var(--rule);
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:14px;
+    box-shadow:0 2px 12px rgba(16,36,56,.08);
+  }
+
+  .card-head {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 20px;
+    color:var(--white);
+    background:var(--navy);
+    border-left:4px solid var(--gold);
+  }
+  .card-head .ico { font-size:15px; }
+  .card-head h2 {
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+  }
+
+  .card-body { padding:16px 20px; }
+  .fields { display:grid; grid-template-columns:1fr 1fr; gap:0 22px; }
+  .field { padding:10px 0; border-bottom:1px solid #edf0f2; }
+  .field.full { grid-column:1/-1; }
+  .field:last-child { border-bottom:none; }
+
+  .fl {
+    font-size:9px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.11em;
+    color:var(--muted);
+    margin-bottom:3px;
+  }
+  .fv { min-height:18px; font-size:13px; font-weight:500; color:var(--text); }
+  .fv.long { font-weight:400; line-height:1.55; white-space:pre-wrap; }
+
+  .project-badge,
+  .status-badge {
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    border:1px solid transparent;
+  }
+  .project-badge { color:var(--navy); background:var(--blue-light); border-color:#bed7e8; }
+
+  .status-wrap { padding:16px 20px 18px; border-top:1px solid #edf0f2; }
+  .status-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+  .status-track { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+  .status-step {
+    min-height:34px;
+    border-radius:5px;
+    background:#e7ebee;
+    color:#7d8791;
+    font-size:9.5px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:5px;
+    border:1px solid #dfe4e8;
+  }
+  .status-step.active {
+    color:white;
+    box-shadow:0 3px 8px rgba(0,0,0,.18);
+    transform:translateY(-1px);
+  }
+
+  .flag-box {
+    padding:10px 12px;
+    border-radius:7px;
+    background:#fff8e5;
+    border:1px solid #ead89a;
+    color:#6f5810;
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .attach-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:16px;
+  }
+  .attach-item {
+    display:flex;
+    flex-direction:column;
+    border:1px solid var(--rule);
+    border-radius:8px;
+    overflow:hidden;
+    text-decoration:none;
+    color:var(--text);
+    background:var(--panel);
+    transition:box-shadow .15s, transform .1s;
+  }
+  .attach-item:hover { box-shadow:0 4px 14px rgba(0,0,0,.14); transform:translateY(-1px); }
+  .attach-thumb {
+    width:100%;
+    height:auto;
+    max-height:340px;
+    object-fit:contain;
+    background:#1e1e1e;
+    display:block;
+  }
+  .attach-icon {
+    width:100%;
+    height:135px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+    background:#e3e8ec;
+  }
+  .attach-name { font-size:12px; font-weight:600; padding:8px 10px 2px; word-break:break-word; }
+  .attach-meta { font-size:10px; color:var(--muted); padding:0 10px 8px; }
+
+  .loading, .error-message {
+    padding:26px;
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .error-message {
+    color:#9f3131;
+    background:#fff5f5;
+    border:1px solid #f0caca;
+    border-radius:8px;
+    margin-bottom:14px;
+  }
+  .spinner {
+    width:21px;
+    height:21px;
+    border:2px solid #ccd4da;
+    border-top-color:var(--blue);
+    border-radius:50%;
+    animation:spin .75s linear infinite;
+    display:inline-block;
+    margin-bottom:8px;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  .hidden { display:none !important; }
+
+  .print-bar {
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    padding:11px 24px;
+    background:var(--white);
+    border-top:1px solid var(--rule);
+    box-shadow:0 -4px 16px rgba(0,0,0,.08);
+  }
+
+  .btn-print, .btn-copy {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:none;
+    border-radius:7px;
+    padding:10px 20px;
+    color:white;
+    font-family:'DM Sans',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    letter-spacing:.02em;
+    transition:background .2s, transform .1s;
+  }
+  .btn-print { background:var(--blue); padding-left:28px; padding-right:28px; }
+  .btn-copy { background:var(--navy); }
+  .btn-print:hover { background:#235b85; }
+  .btn-copy:hover { background:var(--navy-dark); }
+  .btn-print:active, .btn-copy:active { transform:scale(.97); }
+
+  @media (max-width:760px) {
+    body { padding:18px 12px 96px; }
+    .doc-header { align-items:flex-start; padding:16px; }
+    .mark { width:56px; height:56px; font-size:19px; }
+    .doc-meta { display:none; }
+    .fields { grid-template-columns:1fr; }
+    .status-track { grid-template-columns:1fr 1fr; }
+  }
+
+  @media print {
+    body { background:white; padding:0; min-height:0; }
+    .print-bar { display:none; }
+    .page { max-width:100%; }
+    .card { box-shadow:none; border-radius:6px; page-break-inside:avoid; break-inside:avoid-page; }
+    .card-head { break-after:avoid-page; page-break-after:avoid; background:var(--navy) !important; color:white !important; }
+    .doc-header { background:var(--navy) !important; }
+    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    .attach-grid { display:block; }
+    .attach-item { display:block; margin-bottom:16px; page-break-inside:avoid; break-inside:avoid-page; }
+    .attach-thumb { max-height:70vh; max-width:75%; width:auto; margin:0 auto; }
+    .attach-icon { height:80px; }
+    #attachments-card { break-inside:auto; page-break-inside:auto; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="doc-header">
+    <div class="mark">SP</div>
+    <div class="doc-header-text">
+      <div class="agency">City of Salisbury</div>
+      <div class="doc-title">Special Projects Request</div>
+      <div class="doc-subtitle">Request summary and project tracking record</div>
+    </div>
+    <div class="doc-meta" id="doc-meta"></div>
+  </div>
+
+  <div id="page-message" class="loading">
+    <div class="spinner"></div><br>
+    Loading project request…
+  </div>
+
+  <div id="report-content" class="hidden">
+    <div class="card">
+      <div class="card-head"><span class="ico">👤</span><h2>Requester Information</h2></div>
+      <div class="card-body">
+        <div class="fields">
+          <div class="field">
+            <div class="fl">First and Last Name</div>
+            <div class="fv" id="f-name">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Department</div>
+            <div class="fv" id="f-department">—</div>
+          </div>
+          <div class="field" id="department-other-row">
+            <div class="fl">Other Department</div>
+            <div class="fv" id="f-department-other">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Email</div>
+            <div class="fv" id="f-email">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Phone Number</div>
+            <div class="fv" id="f-phone">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Submitted Date</div>
+            <div class="fv" id="f-created-date">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="ico">📋</span><h2>Project Request</h2></div>
+      <div class="card-body">
+        <div class="fields">
+          <div class="field">
+            <div class="fl">Project Type</div>
+            <div class="fv" id="f-project-type">—</div>
+          </div>
+          <div class="field" id="project-type-other-row">
+            <div class="fl">Other Project Type</div>
+            <div class="fv" id="f-project-type-other">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Due Date</div>
+            <div class="fv" id="f-due-date">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Address of Request</div>
+            <div class="fv" id="f-address">—</div>
+          </div>
+          <div class="field full">
+            <div class="fl">Expense Accounts</div>
+            <div class="fv long" id="f-expense-accounts">—</div>
+          </div>
+          <div class="field full">
+            <div class="fl">Description of the Request</div>
+            <div class="fv long" id="f-description">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="ico">📈</span><h2>Project Tracking</h2></div>
+      <div class="card-body">
+        <div class="fields">
+          <div class="field">
+            <div class="fl">Current Status</div>
+            <div class="fv" id="f-status">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Date Completed</div>
+            <div class="fv" id="f-completed-date">—</div>
+          </div>
+          <div class="field full" id="status-flag-row">
+            <div class="fl">Status Flag</div>
+            <div class="flag-box" id="f-status-flag">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-wrap">
+        <div class="status-top">
+          <div class="fl" style="margin:0;">Request Status</div>
+          <div id="status-pill"></div>
+        </div>
+        <div class="status-track">
+          <div class="status-step" id="status-requested">Requested</div>
+          <div class="status-step" id="status-progress">In Progress</div>
+          <div class="status-step" id="status-hold">On Hold</div>
+          <div class="status-step" id="status-completed">Completed</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="ico">🗂️</span><h2>Record Information</h2></div>
+      <div class="card-body">
+        <div class="fields">
+          <div class="field">
+            <div class="fl">Created By</div>
+            <div class="fv" id="f-creator">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Last Edited By</div>
+            <div class="fv" id="f-editor">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Last Edited Date</div>
+            <div class="fv" id="f-edit-date">—</div>
+          </div>
+          <div class="field">
+            <div class="fl">Object ID</div>
+            <div class="fv" id="f-objectid">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="attachments-card">
+      <div class="card-head"><span class="ico">📎</span><h2>Attachments</h2></div>
+      <div class="card-body">
+        <div class="attach-grid" id="f-attachments"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="btn-copy" id="btn-copy" onclick="copyLink()">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+    </svg>
+    Copy Link
+  </button>
+  <button class="btn-print" onclick="window.print()">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8" rx="1"/>
+      <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+    </svg>
+    Print / Save PDF
+  </button>
+</div>
+
+<script>
+/*
+  REQUIRED SETUP
+  Replace the value below with the REST URL for the Special Projects Request layer.
+  It must end in /FeatureServer/0 or the correct layer number.
+
+  Example:
+  const PARENT_LAYER = 'https://services6.arcgis.com/ORG_ID/arcgis/rest/services/SERVICE_NAME/FeatureServer/0';
+*/
+const PARENT_LAYER = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/ArcGIS/rest/services/survey123_d35ef352dac14b39b01b6746af9ea742/FeatureServer/0';
+
+const p = new URLSearchParams(window.location.search);
+const gid = p.get('globalid') || p.get('globalID') || '';
+const oid = p.get('oid') || p.get('objectid') || '';
+
+function escapeHTML(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function value(a, field) {
+  const v = a ? a[field] : null;
+  return v != null && String(v).trim() !== '' ? v : '';
+}
+
+function setText(id, val, fallback = '—') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = val != null && String(val).trim() !== '' ? val : fallback;
+}
+
+function setHTML(id, html, fallback = '—') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = html && String(html).trim() !== '' ? html : fallback;
+}
+
+function hideIfEmpty(rowId, val) {
+  const row = document.getElementById(rowId);
+  if (!row) return;
+  row.classList.toggle('hidden', !val || String(val).trim() === '');
+}
+
+function fmtDate(epoch) {
+  if (!epoch) return '';
+  const d = new Date(epoch);
+  if (isNaN(d.getTime())) return String(epoch);
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+function fmtDateTime(epoch) {
+  if (!epoch) return '';
+  const d = new Date(epoch);
+  if (isNaN(d.getTime())) return String(epoch);
+  return d.toLocaleString('en-US', {
+    month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'
+  });
+}
+
+function projectBadge(projectType) {
+  if (!projectType) return '—';
+  return '<span class="project-badge">' + escapeHTML(projectType) + '</span>';
+}
+
+function normalizeStatus(status) {
+  return String(status || '').toLowerCase().trim();
+}
+
+function statusSettings(status) {
+  const s = normalizeStatus(status);
+  if (s === 'requested' || s === 'submitted') {
+    return { key:'requested', label:status || 'Requested', color:'#2d6f9f', bg:'#edf6fc', border:'#bed7e8' };
+  }
+  if (s === 'in progress' || s === 'in-progress' || s === 'active') {
+    return { key:'progress', label:status || 'In Progress', color:'#d67b22', bg:'#fff3e8', border:'#efc99f' };
+  }
+  if (s === 'on hold' || s === 'hold' || s === 'pending') {
+    return { key:'hold', label:status || 'On Hold', color:'#7b8794', bg:'#f0f2f4', border:'#ced4d9' };
+  }
+  if (s === 'completed' || s === 'complete' || s === 'closed') {
+    return { key:'completed', label:status || 'Completed', color:'#3f8f5f', bg:'#eef8f1', border:'#b9ddc7' };
+  }
+  if (s === 'cancelled' || s === 'canceled') {
+    return { key:'cancelled', label:status || 'Cancelled', color:'#b74c4c', bg:'#fff0f0', border:'#e4b7b7' };
+  }
+  return { key:'other', label:status || 'Not Set', color:'#6b7785', bg:'#f2f4f6', border:'#d4dae0' };
+}
+
+function renderStatus(status) {
+  const settings = statusSettings(status);
+  const pill = document.getElementById('status-pill');
+  pill.innerHTML = '<span class="status-badge" style="color:' + settings.color + ';background:' + settings.bg + ';border-color:' + settings.border + ';">' + escapeHTML(settings.label) + '</span>';
+
+  const ids = ['requested','progress','hold','completed'];
+  ids.forEach(id => {
+    const el = document.getElementById('status-' + id);
+    el.classList.remove('active');
+    el.style.background = '#e7ebee';
+    el.style.borderColor = '#dfe4e8';
+    el.style.color = '#7d8791';
+  });
+
+  if (ids.includes(settings.key)) {
+    const active = document.getElementById('status-' + settings.key);
+    active.classList.add('active');
+    active.style.background = settings.color;
+    active.style.borderColor = settings.color;
+    active.style.color = '#ffffff';
+  }
+}
+
+function populateDetails(a) {
+  const projectType = value(a, 'project_type');
+  const projectTypeOther = value(a, 'project_type_other');
+  const departmentOther = value(a, 'department_other');
+  const status = value(a, 'status');
+  const statusFlag = value(a, 'Status_Flag');
+
+  setText('f-name', value(a, 'first_and_last_name'));
+  setText('f-department', value(a, 'department'));
+  setText('f-department-other', departmentOther);
+  hideIfEmpty('department-other-row', departmentOther);
+  setText('f-email', value(a, 'email'));
+  setText('f-phone', value(a, 'phone_number'));
+  setText('f-created-date', fmtDateTime(value(a, 'CreationDate')));
+
+  setHTML('f-project-type', projectBadge(projectType));
+  setText('f-project-type-other', projectTypeOther);
+  hideIfEmpty('project-type-other-row', projectTypeOther);
+  setText('f-due-date', fmtDate(value(a, 'due_date')));
+  setText('f-address', value(a, 'address_of_request'));
+  setText('f-expense-accounts', value(a, 'expense_accounts'));
+  setText('f-description', value(a, 'description_of_the_request'));
+
+  setText('f-status', status);
+  setText('f-completed-date', fmtDate(value(a, 'date_completed')));
+  setText('f-status-flag', statusFlag);
+  hideIfEmpty('status-flag-row', statusFlag);
+  renderStatus(status);
+
+  setText('f-creator', value(a, 'Creator'));
+  setText('f-editor', value(a, 'Editor'));
+  setText('f-edit-date', fmtDateTime(value(a, 'EditDate')));
+  setText('f-objectid', value(a, 'objectid'));
+
+  const metaDate = fmtDate(value(a, 'CreationDate'));
+  document.getElementById('doc-meta').innerHTML =
+    '<div>' + escapeHTML(value(a, 'first_and_last_name')) + '</div>' +
+    '<div>' + escapeHTML(metaDate) + '</div>' +
+    '<div style="font-size:10px;opacity:.58;margin-top:2px;">OID ' + escapeHTML(value(a, 'objectid')) + '</div>';
+}
+
+function fileIconFor(contentType, name) {
+  const ct = (contentType || '').toLowerCase();
+  const n = (name || '').toLowerCase();
+  if (ct.includes('pdf') || n.endsWith('.pdf')) return '📕';
+  if (ct.startsWith('video/')) return '🎬';
+  if (ct.startsWith('audio/')) return '🎵';
+  if (n.endsWith('.doc') || n.endsWith('.docx')) return '📝';
+  if (n.endsWith('.xls') || n.endsWith('.xlsx')) return '📊';
+  return '📄';
+}
+
+function renderAttachments(objectId, infos) {
+  const card = document.getElementById('attachments-card');
+  const grid = document.getElementById('f-attachments');
+  if (!card || !grid || !infos || !infos.length) return;
+
+  grid.innerHTML = infos.map(att => {
+    const href = PARENT_LAYER + '/' + objectId + '/attachments/' + att.id;
+    const contentType = att.contentType || '';
+    const name = att.name || ('Attachment ' + att.id);
+    const isImage = contentType.toLowerCase().startsWith('image/');
+    const thumb = isImage
+      ? '<img class="attach-thumb" src="' + href + '" alt="' + escapeHTML(name) + '" loading="lazy">'
+      : '<div class="attach-icon">' + fileIconFor(contentType, name) + '</div>';
+    const sizeKB = att.size ? Math.round(att.size / 1024) + ' KB' : '';
+
+    return '<a class="attach-item" href="' + href + '" target="_blank" rel="noopener noreferrer">' +
+      thumb +
+      '<div class="attach-name">' + escapeHTML(name) + '</div>' +
+      (sizeKB ? '<div class="attach-meta">' + escapeHTML(sizeKB) + '</div>' : '') +
+      '</a>';
+  }).join('');
+
+  card.classList.remove('hidden');
+}
+
+async function loadAttachments(objectId) {
+  if (!objectId || PARENT_LAYER.includes('PASTE_YOUR')) return;
+  try {
+    const url = PARENT_LAYER + '/' + objectId + '/attachments?f=json';
+    const data = await fetch(url).then(r => r.json());
+    if (data.error) throw new Error(data.error.message || 'Attachment query failed.');
+    renderAttachments(objectId, data.attachmentInfos || []);
+  } catch (error) {
+    console.error('Attachments error:', error);
+  }
+}
+
+function showReport() {
+  document.getElementById('page-message').classList.add('hidden');
+  document.getElementById('report-content').classList.remove('hidden');
+}
+
+function showError(message) {
+  const box = document.getElementById('page-message');
+  box.className = 'error-message';
+  box.innerHTML = '<strong>Could not load this request.</strong><br>' + escapeHTML(message);
+}
+
+function buildQueryURL() {
+  if (gid) {
+    const where = "globalid='" + gid.replace(/'/g, "''") + "'";
+    return PARENT_LAYER + '/query?where=' + encodeURIComponent(where) + '&outFields=*&returnGeometry=false&returnDomainNames=true&f=json';
+  }
+  if (oid) {
+    return PARENT_LAYER + '/query?objectIds=' + encodeURIComponent(oid) + '&outFields=*&returnGeometry=false&returnDomainNames=true&f=json';
+  }
+  return '';
+}
+
+async function loadRequest() {
+  if (PARENT_LAYER.includes('PASTE_YOUR_FEATURE_LAYER_REST_URL_HERE')) {
+    showError('Open the HTML file and replace PASTE_YOUR_FEATURE_LAYER_REST_URL_HERE with the layer REST URL.');
+    return;
+  }
+
+  const url = buildQueryURL();
+  if (!url) {
+    showError('No GlobalID or Object ID was included in the page URL.');
+    return;
+  }
+
+  try {
+    const data = await fetch(url).then(r => r.json());
+    if (data.error) throw new Error(data.error.message || 'ArcGIS returned an error.');
+    if (!data.features || !data.features.length) throw new Error('No matching request was found.');
+
+    const a = data.features[0].attributes || {};
+    populateDetails(a);
+    showReport();
+    await loadAttachments(a.objectid);
+  } catch (error) {
+    console.error(error);
+    showError(error.message || 'Unknown error.');
+  }
+}
+
+function copyLink() {
+  const btn = document.getElementById('btn-copy');
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.style.background = '#3f8f5f';
+    setTimeout(() => {
+      btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Link';
+      btn.style.background = '';
+    }, 2000);
+  });
+}
+
+loadRequest();
+</script>
+</body>
+</html>
