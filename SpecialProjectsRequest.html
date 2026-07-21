@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Special Projects Request — City of Salisbury</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="module" src="https://js.arcgis.com/5.1/"></script>
 <style>
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 
@@ -258,7 +259,7 @@
     box-shadow:0 -4px 16px rgba(0,0,0,.08);
   }
 
-  .btn-print, .btn-copy {
+  .btn-print, .btn-copy, .btn-signout {
     display:flex;
     align-items:center;
     gap:8px;
@@ -275,9 +276,11 @@
   }
   .btn-print { background:var(--blue); padding-left:28px; padding-right:28px; }
   .btn-copy { background:var(--navy); }
+  .btn-signout { background:var(--hold); }
   .btn-print:hover { background:#235b85; }
   .btn-copy:hover { background:var(--navy-dark); }
-  .btn-print:active, .btn-copy:active { transform:scale(.97); }
+  .btn-signout:hover { background:#65717d; }
+  .btn-print:active, .btn-copy:active, .btn-signout:active { transform:scale(.97); }
 
   @media (max-width:760px) {
     body { padding:18px 12px 96px; }
@@ -452,6 +455,12 @@
 </div>
 
 <div class="print-bar">
+  <button class="btn-signout" id="btn-signout" onclick="signOut()" title="Sign out of ArcGIS Online">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M14 3h5a2 2 0 012 2v14a2 2 0 01-2 2h-5"/>
+    </svg>
+    Sign Out
+  </button>
   <button class="btn-copy" id="btn-copy" onclick="copyLink()">
     <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
@@ -467,16 +476,76 @@
   </button>
 </div>
 
-<script>
+<script type="module">
 /*
-  REQUIRED SETUP
-  Replace the value below with the REST URL for the Special Projects Request layer.
-  It must end in /FeatureServer/0 or the correct layer number.
+  OAUTH SETUP
 
-  Example:
-  const PARENT_LAYER = 'https://services6.arcgis.com/ORG_ID/arcgis/rest/services/SERVICE_NAME/FeatureServer/0';
+  1. Replace PASTE_YOUR_ARCGIS_CLIENT_ID_HERE with the Client ID from the
+     OAuth application item you created in ArcGIS Online.
+  2. In that OAuth application's settings, register the exact public URL of
+     this HTML page as an allowed redirect URI.
+  3. Do not place a Client Secret in this file. This is a browser application.
+*/
+const ARCGIS_CLIENT_ID = 'cM6VkI9F9bGibTv9';
+const ARCGIS_PORTAL_URL = 'https://www.arcgis.com';
+const ARCGIS_SHARING_URL = ARCGIS_PORTAL_URL + '/sharing';
+
+/*
+  FEATURE LAYER SETUP
+  This must end in /FeatureServer/0 or the correct layer number.
 */
 const PARENT_LAYER = 'https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/ArcGIS/rest/services/survey123_d35ef352dac14b39b01b6746af9ea742/FeatureServer/0';
+
+const [OAuthInfo, identityManager] = await $arcgis.import([
+  '@arcgis/core/identity/OAuthInfo.js',
+  '@arcgis/core/identity/IdentityManager.js'
+]);
+
+const oauthInfo = new OAuthInfo({
+  appId: ARCGIS_CLIENT_ID,
+  portalUrl: ARCGIS_PORTAL_URL,
+  flowType: 'auto',
+  popup: false
+});
+
+identityManager.registerOAuthInfos([oauthInfo]);
+
+let arcgisCredential = null;
+
+async function ensureArcGISSignIn() {
+  if (
+    !ARCGIS_CLIENT_ID ||
+    ARCGIS_CLIENT_ID === 'PASTE_YOUR_ARCGIS_CLIENT_ID_HERE'
+  ) {
+    throw new Error(
+      'Replace PASTE_YOUR_ARCGIS_CLIENT_ID_HERE with the Client ID from your ArcGIS Online OAuth application.'
+    );
+  }
+
+  try {
+    arcgisCredential = await identityManager.checkSignInStatus(ARCGIS_SHARING_URL);
+  } catch (error) {
+    // popup:false uses a full-page OAuth redirect. This avoids requiring a
+    // separate oauth-callback.html file on GitHub Pages.
+    arcgisCredential = await identityManager.getCredential(ARCGIS_SHARING_URL);
+  }
+
+  if (!arcgisCredential || !arcgisCredential.token) {
+    throw new Error('ArcGIS sign-in did not return a valid access token.');
+  }
+
+  return arcgisCredential;
+}
+
+function authenticatedURL(url) {
+  if (!arcgisCredential || !arcgisCredential.token) {
+    return url;
+  }
+
+  const authenticated = new URL(url, window.location.href);
+  authenticated.searchParams.set('token', arcgisCredential.token);
+  return authenticated.toString();
+}
 
 const p = new URLSearchParams(window.location.search);
 const gid = p.get('globalid') || p.get('globalID') || '';
@@ -640,7 +709,9 @@ function renderAttachments(objectId, infos) {
   if (!card || !grid || !infos || !infos.length) return;
 
   grid.innerHTML = infos.map(att => {
-    const href = PARENT_LAYER + '/' + objectId + '/attachments/' + att.id;
+    const href = authenticatedURL(
+      PARENT_LAYER + '/' + objectId + '/attachments/' + att.id
+    );
     const contentType = att.contentType || '';
     const name = att.name || ('Attachment ' + att.id);
     const isImage = contentType.toLowerCase().startsWith('image/');
@@ -662,8 +733,14 @@ function renderAttachments(objectId, infos) {
 async function loadAttachments(objectId) {
   if (!objectId || PARENT_LAYER.includes('PASTE_YOUR')) return;
   try {
-    const url = PARENT_LAYER + '/' + objectId + '/attachments?f=json';
-    const data = await fetch(url).then(r => r.json());
+    const url = authenticatedURL(
+      PARENT_LAYER + '/' + objectId + '/attachments?f=json'
+    );
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Attachment request failed with HTTP ' + response.status + '.');
+    }
+    const data = await response.json();
     if (data.error) throw new Error(data.error.message || 'Attachment query failed.');
     renderAttachments(objectId, data.attachmentInfos || []);
   } catch (error) {
@@ -683,13 +760,23 @@ function showError(message) {
 }
 
 function buildQueryURL() {
+  const queryURL = new URL(PARENT_LAYER + '/query');
+  queryURL.searchParams.set('outFields', '*');
+  queryURL.searchParams.set('returnGeometry', 'false');
+  queryURL.searchParams.set('returnDomainNames', 'true');
+  queryURL.searchParams.set('f', 'json');
+
   if (gid) {
     const where = "globalid='" + gid.replace(/'/g, "''") + "'";
-    return PARENT_LAYER + '/query?where=' + encodeURIComponent(where) + '&outFields=*&returnGeometry=false&returnDomainNames=true&f=json';
+    queryURL.searchParams.set('where', where);
+    return authenticatedURL(queryURL.toString());
   }
+
   if (oid) {
-    return PARENT_LAYER + '/query?objectIds=' + encodeURIComponent(oid) + '&outFields=*&returnGeometry=false&returnDomainNames=true&f=json';
+    queryURL.searchParams.set('objectIds', oid);
+    return authenticatedURL(queryURL.toString());
   }
+
   return '';
 }
 
@@ -706,8 +793,14 @@ async function loadRequest() {
   }
 
   try {
-    const data = await fetch(url).then(r => r.json());
-    if (data.error) throw new Error(data.error.message || 'ArcGIS returned an error.');
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Feature request failed with HTTP ' + response.status + '.');
+    }
+    const data = await response.json();
+    if (data.error) {
+      throw new Error(data.error.message || 'ArcGIS returned an error.');
+    }
     if (!data.features || !data.features.length) throw new Error('No matching request was found.');
 
     const a = data.features[0].attributes || {};
@@ -732,7 +825,33 @@ function copyLink() {
   });
 }
 
-loadRequest();
+function signOut() {
+  identityManager.destroyCredentials();
+  window.location.reload();
+}
+
+async function initialize() {
+  try {
+    const box = document.getElementById('page-message');
+    box.className = 'loading';
+    box.innerHTML = '<div class="spinner"></div><br>Signing in to ArcGIS Online…';
+
+    await ensureArcGISSignIn();
+
+    box.innerHTML = '<div class="spinner"></div><br>Loading project request…';
+    await loadRequest();
+  } catch (error) {
+    console.error('OAuth initialization error:', error);
+    showError(error.message || 'ArcGIS sign-in failed.');
+  }
+}
+
+// Inline onclick attributes cannot see module-scoped functions unless they are
+// explicitly attached to window.
+window.copyLink = copyLink;
+window.signOut = signOut;
+
+initialize();
 </script>
 </body>
 </html>
