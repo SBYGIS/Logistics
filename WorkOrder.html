@@ -552,10 +552,6 @@
           <div class="fl">Out of Service</div>
           <div class="fv" id="f-oos">-</div>
         </div>
-        <div class="field full">
-          <div class="fl">Notification Recipient</div>
-          <div class="fv" id="f-notify">-</div>
-        </div>
       </div>
     </div>
 
@@ -799,7 +795,6 @@ function populateDetails(a) {
   setText('f-unit', a.unit_input);
   setText('f-equipment', a.equipment_input);
   setHTML('f-oos', badge(outOfService));
-  setText('f-notify', a.notify);
   renderStatus(status);
 
   setText('f-location', a.location_input);
