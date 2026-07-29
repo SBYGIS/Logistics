@@ -414,8 +414,8 @@
         </div>
         <div class="status-track">
           <div class="status-step" id="status-requested">Requested</div>
-          <div class="status-step" id="status-progress">In Progress</div>
           <div class="status-step" id="status-hold">On Hold</div>
+          <div class="status-step" id="status-progress">In Progress</div>
           <div class="status-step" id="status-completed">Completed</div>
         </div>
       </div>
@@ -608,47 +608,117 @@ function normalizeStatus(status) {
   return String(status || '').toLowerCase().trim();
 }
 
+// Status order and colors match the dashboard, chart, and pop-up:
+// Requested → On Hold → In Progress → Completed
+const STATUS_STAGES = [
+  {
+    key:'requested',
+    label:'Requested',
+    activeColor:'#F04B23',
+    inactiveColor:'#F9D8CF',
+    activeText:'#FFFFFF',
+    pillText:'#D94320'
+  },
+  {
+    key:'hold',
+    label:'On Hold',
+    activeColor:'#F0D23F',
+    inactiveColor:'#FAF2C5',
+    activeText:'#263238',
+    pillText:'#8A7300'
+  },
+  {
+    key:'progress',
+    label:'In Progress',
+    activeColor:'#F4A300',
+    inactiveColor:'#FCE7B8',
+    activeText:'#263238',
+    pillText:'#C77800'
+  },
+  {
+    key:'completed',
+    label:'Completed',
+    activeColor:'#7BC66A',
+    inactiveColor:'#DDEFD8',
+    activeText:'#263238',
+    pillText:'#4F7F46'
+  }
+];
+
 function statusSettings(status) {
   const s = normalizeStatus(status);
+
   if (s === 'requested' || s === 'submitted') {
-    return { key:'requested', label:status || 'Requested', color:'#2d6f9f', bg:'#edf6fc', border:'#bed7e8' };
+    return { key:'requested', label:status || 'Requested' };
   }
-  if (s === 'in progress' || s === 'in-progress' || s === 'active') {
-    return { key:'progress', label:status || 'In Progress', color:'#d67b22', bg:'#fff3e8', border:'#efc99f' };
-  }
+
   if (s === 'on hold' || s === 'hold' || s === 'pending') {
-    return { key:'hold', label:status || 'On Hold', color:'#7b8794', bg:'#f0f2f4', border:'#ced4d9' };
+    return { key:'hold', label:status || 'On Hold' };
   }
+
+  if (s === 'in progress' || s === 'in-progress' || s === 'active') {
+    return { key:'progress', label:status || 'In Progress' };
+  }
+
   if (s === 'completed' || s === 'complete' || s === 'closed') {
-    return { key:'completed', label:status || 'Completed', color:'#3f8f5f', bg:'#eef8f1', border:'#b9ddc7' };
+    return { key:'completed', label:status || 'Completed' };
   }
+
   if (s === 'cancelled' || s === 'canceled') {
-    return { key:'cancelled', label:status || 'Cancelled', color:'#b74c4c', bg:'#fff0f0', border:'#e4b7b7' };
+    return {
+      key:'cancelled',
+      label:status || 'Cancelled',
+      pillText:'#6D7377',
+      inactiveColor:'#F0F2F4',
+      activeColor:'#6D7377'
+    };
   }
-  return { key:'other', label:status || 'Not Set', color:'#6b7785', bg:'#f2f4f6', border:'#d4dae0' };
+
+  return {
+    key:'other',
+    label:status || 'Not Set',
+    pillText:'#6B7785',
+    inactiveColor:'#F2F4F6',
+    activeColor:'#6B7785'
+  };
 }
 
 function renderStatus(status) {
   const settings = statusSettings(status);
+  const currentIndex = STATUS_STAGES.findIndex(stage => stage.key === settings.key);
+  const currentStage = currentIndex >= 0 ? STATUS_STAGES[currentIndex] : null;
   const pill = document.getElementById('status-pill');
-  pill.innerHTML = '<span class="status-badge" style="color:' + settings.color + ';background:' + settings.bg + ';border-color:' + settings.border + ';">' + escapeHTML(settings.label) + '</span>';
 
-  const ids = ['requested','progress','hold','completed'];
-  ids.forEach(id => {
-    const el = document.getElementById('status-' + id);
-    el.classList.remove('active');
-    el.style.background = '#e7ebee';
-    el.style.borderColor = '#dfe4e8';
-    el.style.color = '#7d8791';
+  const pillText = currentStage ? currentStage.pillText : settings.pillText;
+  const pillBackground = currentStage ? currentStage.inactiveColor : settings.inactiveColor;
+  const pillBorder = currentStage ? currentStage.activeColor : settings.activeColor;
+
+  pill.innerHTML =
+    '<span class="status-badge" style="' +
+      'color:' + pillText + ';' +
+      'background:' + pillBackground + ';' +
+      'border-color:' + pillBorder + ';' +
+    '">' +
+      escapeHTML(settings.label) +
+    '</span>';
+
+  STATUS_STAGES.forEach((stage, index) => {
+    const el = document.getElementById('status-' + stage.key);
+    const reached = currentIndex >= 0 && index <= currentIndex;
+    const current = index === currentIndex;
+
+    el.classList.toggle('active', current);
+
+    if (reached) {
+      el.style.background = stage.activeColor;
+      el.style.borderColor = current ? '#263238' : stage.activeColor;
+      el.style.color = stage.activeText;
+    } else {
+      el.style.background = stage.inactiveColor;
+      el.style.borderColor = stage.inactiveColor;
+      el.style.color = '#7D8791';
+    }
   });
-
-  if (ids.includes(settings.key)) {
-    const active = document.getElementById('status-' + settings.key);
-    active.classList.add('active');
-    active.style.background = settings.color;
-    active.style.borderColor = settings.color;
-    active.style.color = '#ffffff';
-  }
 }
 
 function populateDetails(a) {
